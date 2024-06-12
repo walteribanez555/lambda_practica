@@ -27,6 +27,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Wait for any previous update to complete
+        run: sleep 30  # Adjust this duration as needed
+
       - name: Zip and deploy to Lambda
         run: |
           zip -r deploy.zip . -x '.git/*' -x '.github/*'
