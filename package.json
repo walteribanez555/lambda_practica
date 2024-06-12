@@ -2,7 +2,7 @@
   "name": "primera",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/handler.js",
+  "main": "./src/handler.mjs",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
