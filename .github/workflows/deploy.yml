@@ -27,11 +27,28 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Wait for any previous update to complete
-        run: sleep 30  # Adjust this duration as needed
-
       - name: Zip and deploy to Lambda
         run: |
           zip -r deploy.zip . -x '.git/*' -x '.github/*'
-          aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:537757446889:function:test --zip-file fileb://deploy.zip
-          aws lambda update-function-configuration --function-name arn:aws:lambda:us-east-1:537757446889:function:test --handler src/handler.handler
+          
+          RETRY_COUNT=5
+          RETRY_INTERVAL=10
+          for i in $(seq 1 $RETRY_COUNT); do
+            aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:537757446889:function:test --zip-file fileb://deploy.zip && break
+            if [ "$i" -eq "$RETRY_COUNT" ]; then
+              echo "Max retries reached. Exiting."
+              exit 1
+            fi
+            echo "Retrying in $RETRY_INTERVAL seconds..."
+            sleep $RETRY_INTERVAL
+          done
+
+          for i in $(seq 1 $RETRY_COUNT); do
+            aws lambda update-function-configuration --function-name arn:aws:lambda:us-east-1:537757446889:function:test --handler src/handler.handler && break
+            if [ "$i" -eq "$RETRY_COUNT" ]; then
+              echo "Max retries reached. Exiting."
+              exit 1
+            fi
+            echo "Retrying in $RETRY_INTERVAL seconds..."
+            sleep $RETRY_INTERVAL
+          done
