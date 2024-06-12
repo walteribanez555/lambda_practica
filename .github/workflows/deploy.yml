@@ -30,4 +30,4 @@ jobs:
       - name: Zip and deploy to Lambda
         run: |
           zip -r deploy.zip . -x '.git/*' -x '.github/*'
-          aws lambda update-function-code --function-name YOUR_LAMBDA_FUNCTION_NAME --zip-file fileb://deploy.zip
+          aws lambda update-function-code --function-name arn:aws:lambda:us-east-1:537757446889:function:test --zip-file fileb://deploy.zip
