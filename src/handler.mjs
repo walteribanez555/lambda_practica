@@ -56,7 +56,7 @@ export const handler = async (event) => {
 
     } catch ( error ) {
         console.log( 'ERROR VERIFIED: ', error );
-        return endpoints.others( 400, { message : '400 Invalid Token' }, 'other' );
+        return endpoints.others( 400, { message : error }, 'other' );
     }
     
 
