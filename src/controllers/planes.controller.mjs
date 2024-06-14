@@ -1,7 +1,7 @@
 import { buildResponse } from "../utils/helpers.mjs";
 
 
-export async function getPlanes({id, schema}){
+export async function getPlanes({id}){
     try{
         return buildResponse(200, 'realizado', 'get');
     }catch{
