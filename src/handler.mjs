@@ -50,7 +50,7 @@ export const handler = async (event) => {
         // const verified = jwt.verify( authorization, process.env.SECRET )
         // console.log( 'VERIFIED: ', verified );
         if ( endpoints.hasOwnProperty( path ) )
-            return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, data, schema } );
+            return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, data } );
 
         return endpoints.others( 404, { message : '404 Not Found' }, 'other' );
 
