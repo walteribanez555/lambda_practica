@@ -41,12 +41,12 @@ export const handler = async (event) => {
         return endpoints[path]()
     }
 
-    if(!authorization)
-        return endpoints.others(401, {message : '401 Access denied'}, 'other');
+    // if(!authorization)
+    //     return endpoints.others(401, {message : '401 Access denied'}, 'other');
 
     try {
-        const verified = jwt.verify( authorization, process.env.SECRET )
-        console.log( 'VERIFIED: ', verified );
+        // const verified = jwt.verify( authorization, process.env.SECRET )
+        // console.log( 'VERIFIED: ', verified );
         if ( endpoints.hasOwnProperty( path ) )
             return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, data, schema } );
 
