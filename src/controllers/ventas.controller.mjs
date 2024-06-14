@@ -1,5 +1,5 @@
 
-
+import { buildResponse } from "../utils/helpers.mjs";
 
 export async function getVentas({id, schema}){
     try{
