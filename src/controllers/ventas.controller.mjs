@@ -1,10 +1,7 @@
 
+import { getPlanes } from "../models/coberturas.model.mjs";
 import { buildResponse } from "../utils/helpers.mjs";
 
 export async function getVentas({id}){
-    try{
-        return buildResponse(200, 'realizado', 'get');
-    }catch{
-        return buildResponse(500, error, 'get');
-    }
+    return await getPlanes({ id, schema : 'redcard'});
 }
