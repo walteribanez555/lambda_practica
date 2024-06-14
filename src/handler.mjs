@@ -1,3 +1,10 @@
+import { getCoberturas } from "./controllers/coberturas.controller.mjs";
+import { getExtras } from "./controllers/extras.controller.mjs";
+import { getPlanes } from "./controllers/planes.controller.mjs";
+import { getPrecios } from "./controllers/precios.controller.mjs";
+import { getVentas } from "./controllers/ventas.controller.mjs";
+import { ping } from "./utils/ping.mjs";
+
 export const handler = async (event) => {
     console.log( 'Main Fecha-Hora: ', new Date() );
     console.log( 'EVENT: ' , event );
@@ -9,8 +16,47 @@ export const handler = async (event) => {
     console.log( 'METHOD: ' , method.toLowerCase() );
     console.log( 'PATH: ' , path );
     // Your Lambda function code
-    return {
-        statusCode: 200,
-        body: JSON.stringify('Segunda prueba' + path + ' ' + method.toLowerCase() + ' ' + id),
-    };
+
+    const endpoints = {
+        '/' : ping,
+        '/coberturas' : {
+            'get': getCoberturas,
+        },
+        '/extras' : {
+            'get' : getExtras,
+        },
+        '/planes' : {
+            'get' :getPlanes,
+        },
+        '/precios' : {
+            'get' : getPrecios,
+        },
+        '/ventas' : {
+            'get' : getVentas,
+        }
+
+    }
+
+    if(path === '/'){
+        return endpoints[path]()
+    }
+
+    if(!authorization)
+        return endpoints.others(401, {message : '401 Access denied'}, 'other');
+
+    try {
+        const verified = jwt.verify( authorization, process.env.SECRET )
+        console.log( 'VERIFIED: ', verified );
+        if ( endpoints.hasOwnProperty( path ) )
+            return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, data, schema } );
+
+        return endpoints.others( 404, { message : '404 Not Found' }, 'other' );
+
+    } catch ( error ) {
+        console.log( 'ERROR VERIFIED: ', error );
+        return endpoints.others( 400, { message : '400 Invalid Token' }, 'other' );
+    }
+    
+
+
 };
