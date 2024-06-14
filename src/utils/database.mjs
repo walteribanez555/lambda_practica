@@ -9,9 +9,6 @@
 // Dependencies
 import { colorLog } from './helpers.mjs';
 import mysql from 'mysql';
-import { MongoClient } from 'mongodb';
-import pkg from 'pg';
-const { Pool } = pkg;
 
 export class ErrorDB {
     constructor( error ) {
@@ -21,24 +18,14 @@ export class ErrorDB {
 }
 
 function exportPool( schema ) {
-    const pool = process.env.DB === 'postgres' ? process.env.DB_USER && process.env.DB_HOST && process.env.DB_PASS && process.env.DB_PORT ? new Pool( {
-        user : process.env.DB_USER,
-        host : process.env.DB_HOST,
-        database : schema,
-        password : process.env.DB_PASS,
-        port : process.env.DB_PORT
-    } ) : false 
-        : process.env.DB === 'mysql' ? process.env.DB_USER && process.env.DB_HOST && process.env.DB_PASS && process.env.DB_PORT ? mysql.createPool( {
-            user : process.env.DB_USER,
-            host : process.env.DB_HOST,
-            database : schema,
-            password : process.env.DB_PASS,
-            port : process.env.DB_PORT
-        } ) : false 
-            : process.env.DB === 'mongo' ? process.env.DB_HOST ? new MongoClient( process.env.DB_HOST, {
-                useUnifiedTopology: true
-            } ) : false 
-                : false;
+    const pool = mysql.createPool({
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: schema, // Assuming DB_NAME is used for the schema/database name
+        password: process.env.DB_PASS,
+        port: process.env.DB_PORT
+    });
+
     return pool;
 }
             
