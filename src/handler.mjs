@@ -4,6 +4,7 @@ import { getPlanes } from "./controllers/planes.controller.mjs";
 import { getPrecios } from "./controllers/precios.controller.mjs";
 import { getVentas } from "./controllers/ventas.controller.mjs";
 import { ping } from "./utils/ping.mjs";
+import { parseJsonToObject } from './utils/helpers.mjs';
 
 export const handler = async (event) => {
     console.log( 'Main Fecha-Hora: ', new Date() );
