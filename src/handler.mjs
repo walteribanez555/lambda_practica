@@ -10,6 +10,7 @@ export const handler = async (event) => {
     console.log( 'Main Fecha-Hora: ', new Date() );
     console.log( 'EVENT: ' , event );
     const { method, path } = event?.requestContext?.http ? event.requestContext.http : {};
+    const schema = "redcard"
     // const authorization = event?.headers?.authorization ? event.headers.authorization : false;
     // const schema = event.headers.schema || 'assist_trip';
     const { id, init, end, nro_identificacion } = typeof( event.queryStringParameters ) === 'object' && Object.keys( event.queryStringParameters ).length > 0 ? event.queryStringParameters : false;
@@ -52,7 +53,7 @@ export const handler = async (event) => {
         // const verified = jwt.verify( authorization, process.env.SECRET )
         // console.log( 'VERIFIED: ', verified );
         if ( endpoints.hasOwnProperty( path ) )
-            return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, data } );
+            return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, data , schema } );
 
         return endpoints.others( 404, { message : '404 Not Found' }, 'other' );
 
