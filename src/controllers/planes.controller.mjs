@@ -1,10 +1,5 @@
-import { buildResponse } from "../utils/helpers.mjs";
-
+import { getServicios } from "../models/servicios.model.mjs";
 
 export async function getPlanes({id}){
-    try{
-        return buildResponse(200, 'realizado', 'get');
-    }catch{
-        return buildResponse(500, error, 'get');
-    }
+    return getServicios({ id, schema : 'redcard'});
 }
