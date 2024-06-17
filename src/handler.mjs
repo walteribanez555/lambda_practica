@@ -5,6 +5,7 @@ import { getPrecios } from "./controllers/precios.controller.mjs";
 import { getVentas } from "./controllers/ventas.controller.mjs";
 import { ping } from "./utils/ping.mjs";
 import { buildResponse, parseJsonToObject } from './utils/helpers.mjs';
+import { getVoucher } from "./controllers/voucher.controller.mjs";
 
 export const handler = async (event) => {
     console.log( 'Main Fecha-Hora: ', new Date() );
@@ -37,6 +38,9 @@ export const handler = async (event) => {
         },
         '/ventas' : {
             'get' : getVentas,
+        },
+        '/voucher' : {
+            'get' : getVoucher,
         },
         'others' : buildResponse,
 
