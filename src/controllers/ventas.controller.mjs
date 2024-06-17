@@ -10,7 +10,7 @@ export async function getVentas({id}){
 
 
 export async function postVenta({ data  } ) { 
-    if( !data.fecha_salida || !data.fecha_retorno || !data.destiny || !vouchers  ){
+    if( !data.fecha_salida || !data.fecha_retorno || !data.destiny || !data.vouchers  ){
         return buildResponse(400, {message : "Missing data"}, 'post');
     }
 
