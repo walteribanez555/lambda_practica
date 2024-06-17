@@ -1,6 +1,9 @@
 import { getPolizas } from "../models/polizas.model.mjs";
 
+export async function getVoucher({ id }) {
+  if (!id) {
+    return buildResponse(500, "voucher number required", "get");
+  }
 
-export async function getVoucher({id}){
-    return getPolizas({ id, schema : 'redcard'});
+  return await getPolizas({ id, schema: "redcard" });
 }
