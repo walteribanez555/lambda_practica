@@ -2,7 +2,7 @@ import { getCoberturas } from "./controllers/coberturas.controller.mjs";
 import { getExtras } from "./controllers/extras.controller.mjs";
 import { getPlanes } from "./controllers/planes.controller.mjs";
 import { getPrecios } from "./controllers/precios.controller.mjs";
-import { getVentas } from "./controllers/ventas.controller.mjs";
+import { getVentas, postVenta } from "./controllers/ventas.controller.mjs";
 import { ping } from "./utils/ping.mjs";
 import { buildResponse, parseJsonToObject } from './utils/helpers.mjs';
 import { getVoucher } from "./controllers/voucher.controller.mjs";
@@ -37,7 +37,8 @@ export const handler = async (event) => {
             'get' : getPrecios,
         },
         '/ventas' : {
-            'get' : getVentas,
+            'get'  : getVentas,
+            'post' : postVenta,
         },
         '/vouchers' : {
             'get' : getVoucher,
