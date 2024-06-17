@@ -1,10 +1,7 @@
-import { buildResponse } from "../utils/helpers.mjs";
+import { getExtras as modelGetExtras } from '../models/extras.model.mjs';
+
 
 
 export async function getExtras({id}){
-    try{
-        return buildResponse(200, 'realizado', 'get');
-    }catch{
-        return buildResponse(500, error, 'get');
-    }
+    return modelGetExtras({ id, schema : 'redcard'});
 }
