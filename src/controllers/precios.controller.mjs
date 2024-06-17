@@ -1,10 +1,8 @@
 
 import { buildResponse } from "../utils/helpers.mjs";
+import { getPrecios as modelGetPrecios } from "../models/precios.model.mjs";
+
 
 export async function getPrecios({id}){
-    try{
-        return buildResponse(200, 'realizado', 'get');
-    }catch{
-        return buildResponse(500, error, 'get');
-    }
+    return modelGetPrecios({ id, schema : 'redcard'})
 }
