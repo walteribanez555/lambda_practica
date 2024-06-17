@@ -39,7 +39,7 @@ export const handler = async (event) => {
         '/ventas' : {
             'get' : getVentas,
         },
-        '/voucher' : {
+        '/vouchers' : {
             'get' : getVoucher,
         },
         'others' : buildResponse,
