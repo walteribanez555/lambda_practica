@@ -17,7 +17,7 @@ export async function postVenta({ data  } ) {
 
     const { servicio, multiviajes, nroDias, vouchers } = data;
 
-    return buildResponse(200, {message : data}, 'post');
+    return buildResponse(200, {message : 'hola'}, 'post');
     const precio = await redCardPrice({ schema : 'redcard', servicio, multiviajes, nroDias, cantidad : vouchers.length, tipo_descuento : 1, descuento : 0 });
 
 
