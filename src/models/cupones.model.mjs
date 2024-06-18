@@ -31,7 +31,7 @@ export async function getCupones({ id, schema }) {
 
     const currentDate = new Date();
 
-    response = response.filter((cupon) => {
+    const responseFiltered = response.filter((cupon) => {
       if (
         cupon.fecha_desde >= currentDate &&
         cupon.fecha_hasta <= currentDate
@@ -41,7 +41,7 @@ export async function getCupones({ id, schema }) {
       return false;
     });
 
-    return buildResponse(200, response, "get");
+    return buildResponse(200, responseFiltered, "get");
   } catch (error) {
     colorLog(` GET CUPONES ERROR:  ${JSON.stringify(error)}`, "red", "reset");
     return buildResponse(500, error, "get");
