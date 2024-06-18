@@ -33,8 +33,8 @@ export async function getCupones({ id, schema }) {
 
     const responseFiltered = response.filter((cupon) => {
       if (
-        cupon.fecha_desde >= currentDate &&
-        cupon.fecha_hasta <= currentDate
+        cupon.fecha_desde <= currentDate &&
+        cupon.fecha_hasta >= currentDate
       ) {
         return true;
       }
