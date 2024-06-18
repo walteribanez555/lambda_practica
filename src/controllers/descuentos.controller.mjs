@@ -4,7 +4,7 @@ import { buildResponse } from "../utils/helpers.mjs";
 export async function getDescuentos({ id }) {
 
     try{
-        const cupones = getCupones({ id, schema: 'redcard'});
+        const cupones = await getCupones({ id, schema: 'redcard'});
         
         return buildResponse(200, cupones, 'get')
 
