@@ -51,6 +51,10 @@ export async function getCupones({ id, schema }) {
       return false;
     }).map( cupon => {
 
+        const cuponDetails = JSON.parse(cupon.oficina_id);
+
+        cupon.description = cuponDetails.description;
+
         delete cupon.oficina_id;
         return cupon;
 
