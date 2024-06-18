@@ -22,8 +22,17 @@ export async function postVenta({ data  } ) {
     
 
 
+    //Crear Venta por pasajero
 
-    return buildResponse(200, {message : data.vouchers}, 'post');
+    //Agregar Extras por pasajero
+
+    //Crear Poliza por pasajero
+
+    //Crear Beneficiario por pasajero
+
+
+
+    return buildResponse(200, { vouchers, cantidad: vouchers.length }, 'post');
 
 }
 
