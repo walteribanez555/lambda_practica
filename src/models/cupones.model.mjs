@@ -32,9 +32,19 @@ export async function getCupones({ id, schema }) {
     const currentDate = new Date();
 
     const responseFiltered = response.filter((cupon) => {
+
+
+        const cuponDetail = cupon.name.split('-');
+        const cuponApi = cuponDetail[cuponDetail.length - 1];
+
+
+
+
       if (
         cupon.fecha_desde <= currentDate &&
-        cupon.fecha_hasta >= currentDate
+        cupon.fecha_hasta >= currentDate &&
+        cuponApi === 'api'
+        
       ) {
         return true;
       }
