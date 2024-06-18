@@ -6,6 +6,7 @@ import { getVentas, postVenta } from "./controllers/ventas.controller.mjs";
 import { ping } from "./utils/ping.mjs";
 import { buildResponse, parseJsonToObject } from './utils/helpers.mjs';
 import { getVoucher } from "./controllers/voucher.controller.mjs";
+import { getDescuentos } from "./controllers/descuentos.controller.mjs";
 
 export const handler = async (event) => {
     console.log( 'Main Fecha-Hora: ', new Date() );
@@ -14,7 +15,7 @@ export const handler = async (event) => {
     const schema = "redcard";
     // const authorization = event?.headers?.authorization ? event.headers.authorization : false;
     // const schema = event.headers.schema || 'assist_trip';
-    const { id, init, end, nro_identificacion } = typeof( event.queryStringParameters ) === 'object' && Object.keys( event.queryStringParameters ).length > 0 ? event.queryStringParameters : false;
+    const { id, init, end, nro_identificacion, quantity } = typeof( event.queryStringParameters ) === 'object' && Object.keys( event.queryStringParameters ).length > 0 ? event.queryStringParameters : false;
     const data = typeof( event.body ) === 'string' && Object.keys( parseJsonToObject( event.body ) ).length > 0 ? parseJsonToObject( event.body ) : {};
     console.log( 'DATA: ' , data );
     console.log( 'ID: ' , id );
@@ -43,6 +44,9 @@ export const handler = async (event) => {
         '/vouchers' : {
             'get' : getVoucher,
         },
+        '/descuentos' : {
+            'get' : getDescuentos, 
+        },
         'others' : buildResponse,
 
     }
@@ -58,7 +62,7 @@ export const handler = async (event) => {
         // const verified = jwt.verify( authorization, process.env.SECRET )
         // console.log( 'VERIFIED: ', verified );
         if ( endpoints.hasOwnProperty( path ) )
-            return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, data} );
+            return await endpoints[ path ][ method.toLowerCase() ]( { id, init, end, nro_identificacion, quantity, data} );
 
         return endpoints.others( 404, { message : '404 Not Found' }, 'other' );
 

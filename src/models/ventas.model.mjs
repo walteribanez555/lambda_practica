@@ -23,3 +23,21 @@ const model = {
     multiviajes : 'string',
     status : 'number'
 };
+
+
+export async function postVentas( { data, schema } ){ 
+    try{
+        const database = new DatabaseOperations( tableName, schema);
+
+        const newRegister = data;
+
+        
+
+
+
+
+    }catch(err) { 
+        colorLog( ` POST VENTAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
+        return buildResponse( 500, error, 'post' );
+    }
+}
