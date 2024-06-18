@@ -34,7 +34,7 @@ export async function getCupones({ id, schema }) {
     const responseFiltered = response.filter((cupon) => {
 
 
-        const cuponDetail = cupon.name.split('-');
+        const cuponDetail = cupon.nombre.split('-');
         const cuponApi = cuponDetail[cuponDetail.length - 1];
 
 
