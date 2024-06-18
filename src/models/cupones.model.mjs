@@ -60,76 +60,11 @@ export async function getCupones({ id, schema }) {
 
     })
 
-    return buildResponse(200, responseFiltered, "get");
+    return responseFiltered;
   } catch (error) {
-    colorLog(` GET CUPONES ERROR:  ${JSON.stringify(error)}`, "red", "reset");
-    return buildResponse(500, error, "get");
+    throw error;
   }
 }
 
-export async function postCupones({ data, schema }) {
-  try {
-    const database = new DatabaseOperations(tableName, schema);
-    const newRegister = validateData(data, model);
-    if (Object.keys(newRegister).length === 0)
-      return buildResponse(
-        400,
-        { message: "Missing required fields or not valid" },
-        "post"
-      );
 
-    const response = await database.create(newRegister, keyField);
-    return buildResponse(200, response, "post", keyField, data);
-  } catch (error) {
-    colorLog(` POST CUPONES ERROR:  ${JSON.stringify(error)}`, "red", "reset");
-    return buildResponse(500, error, "post");
-  }
-}
 
-export async function putCupones({ id, data, schema }) {
-  try {
-    const database = new DatabaseOperations(tableName, schema);
-    const update = validateData(data, model, "put");
-
-    if (Object.keys(update).length === 0)
-      return buildResponse(400, { message: "Missing fields to update" }, "put");
-
-    if (!id)
-      return buildResponse(
-        400,
-        { message: "Missing the record id to update" },
-        "put"
-      );
-
-    const where = {
-      [keyField]: id,
-    };
-    const response = await database.update(update, where);
-    return buildResponse(200, response, "put");
-  } catch (error) {
-    colorLog(` PUT CUPONES ERROR:  ${JSON.stringify(error)}`, "red", "reset");
-    return buildResponse(500, error, "put");
-  }
-}
-
-export async function deleteCupones({ id, schema }) {
-  try {
-    const database = new DatabaseOperations(tableName, schema);
-    if (!id)
-      return buildResponse(
-        400,
-        { message: "Missing the record id to delete" },
-        "delete"
-      );
-
-    await database.delete(id, keyField);
-    return buildResponse(200, { message: "Register deleted!" }, "delete");
-  } catch (error) {
-    colorLog(
-      ` DELETE CUPONES ERROR:  ${JSON.stringify(error)}`,
-      "red",
-      "reset"
-    );
-    return buildResponse(500, error, "delete");
-  }
-}
