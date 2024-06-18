@@ -49,7 +49,12 @@ export async function getCupones({ id, schema }) {
         return true;
       }
       return false;
-    });
+    }).map( cupon => {
+
+        delete cupon.oficina_id;
+        return cupon;
+
+    })
 
     return buildResponse(200, responseFiltered, "get");
   } catch (error) {
