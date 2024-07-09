@@ -41,6 +41,9 @@ export async function postVenta({ data }) {
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
   const descuentosFiltered = descuentos.filter((descuento) => {
+
+    if(descuento.oficina_id === null || descuento.oficina_id=== undefined ) return null;
+
     const policy = JSON.parse(descuento.oficina_id);
     // if (
     //   policy === null ||
