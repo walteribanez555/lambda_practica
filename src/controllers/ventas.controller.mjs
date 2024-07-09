@@ -38,22 +38,22 @@ export async function postVenta({ data }) {
 //   };
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
-  const descuentosFiltered = descuentos.filter((descuento) => {
-    // const policy  = JSON.parse(descuento.oficina_id);
-    const currentDate = new Date();
-    const initialDate = new Date(descuento.fecha_desde);
-    const finalDate = new Date(descuento.fecha_hasta);
-    if (
-      initialDate <= currentDate &&
-      finalDate >= currentDate 
-        // policy.daysMin >= nroDias &&
-        // policy.isApi  === 1 &&
-        // cantidad % policy.quantity == 0
-    ) {
-      return true;
-    }
-    return false;
-  });
+  // const descuentosFiltered = descuentos.filter((descuento) => {
+  //   // const policy  = JSON.parse(descuento.oficina_id);
+  //   const currentDate = new Date();
+  //   const initialDate = new Date(descuento.fecha_desde);
+  //   const finalDate = new Date(descuento.fecha_hasta);
+  //   if (
+  //     initialDate <= currentDate &&
+  //     finalDate >= currentDate 
+  //       // policy.daysMin >= nroDias &&
+  //       // policy.isApi  === 1 &&
+  //       // cantidad % policy.quantity == 0
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // });
 
   // const montoDescuentoPersona = descuentosFiltered.reduce(
   //   (acc, descuento) => acc + parseFloat(descuento.valor),
