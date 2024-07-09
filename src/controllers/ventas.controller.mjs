@@ -24,23 +24,7 @@ export async function postVenta({ data }) {
 
   const currentDate = new Date();
 
-  // const precio = await redCardPrice({
-  //   schema: "redcard",
-  //   servicio,
-  //   multiviajes: multiviajes,
-  //   nroDias,
-  //   cantidad: 1,
-  //   tipo_descuento: 1,
-  //   descuento: 0,
-  // });
 
-  // const descuentos =
-
-  //   const item = {
-  //     quantity: 1,
-  //     daysMin: 60,
-  //     countries: ["bolivia", "peru", "argentina", "chile", "mexico"],
-  //   };
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
   const descuentosFiltered = descuentos.filter((descuento) => {
@@ -101,55 +85,49 @@ export async function postVenta({ data }) {
   const ventas_id = [];
   const polizas_id = [];
 
-await vouchers.forEach(async voucher => {
+  for (const voucher of vouchers) {
+    const nuevaVenta = { 
+      office_id: 1,
+      username: 'walteribanez555@gmail.com',
+      cliente_id: 29,
+      tipo_venta: 5,
+      forma_pago: 1,
+      fecha_venta: currentDate.toISOString().split("T")[0],  
+      cantidad: `${1}`,
+      precio: `${price.aux_precio}`,
+      total: `${price.aux_precio}`,
+      plus: 0,
+      tipo_descuento: `${2}`,
+      descuento: `${descuentoTotal}`,
+      tipo_valor: 1,
+      descuento_extra: 0,
+      total_pago: `${totalPagar}`,
+      status: 2,
+      comision: 0,
+    };
 
-  
-  const nuevaVenta = { 
-    office_id  : 1,
-    username : 'walteribanez555@gmail.com',
-    cliente_id : 29,
-    tipo_venta : 5,
-    forma_pago : 1,
-    fecha_venta : currentDate.toISOString().split("T")[0],  
-    cantidad : `${1}`,
-    precio : `${price.aux_precio}`,
-    total : `${price.aux_precio}`,
-    plus : 0,
-    tipo_descuento : `${2}`,
-    descuento : `${descuentoTotal}`,
-    tipo_valor : 1,
-    descuento_extra : 0,
-    total_pago : `${totalPagar}`,
-    status : 2,
-    comision : 0,
+    const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
+
+    const venta_id = venta.insertId;
+
+    const nuevaPoliza = {
+      venta_id,
+      servicio_id: servicio,
+      destino: data.destiny,
+      fecha_salida,
+      fecha_retorno,
+      extra: 0,
+      status: 2,
+      username: "walteribanez555@gmail.com",
+    };
+
+    const poliza = await postPolizas({ data: nuevaPoliza, schema: "redcard" });
+
+    const poliza_id = poliza.insertId;
+
+    ventas_id.push(venta_id);
+    polizas_id.push(poliza_id);
   }
-
-  const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
-
-  venta_id = venta.insertId;
-
-  const nuevaPoliza = {
-    venta_id,
-    servicio_id: servicio,
-    destino: data.destiny,
-    fecha_salida,
-    fecha_retorno,
-    extra: 0,
-    status: 2,
-    username: "walteribanez555@gmail.com",
-  }
-
-  const poliza = await postPolizas({ data: nuevaPoliza, schema: "redcard" });
-
-  const poliza_id = poliza.insertId;
-
-
-  ventas_id.push(venta_id);
-  polizas_id.push(poliza_id);
-
-  
-});
-
   // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta
 
