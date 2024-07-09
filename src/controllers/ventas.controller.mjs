@@ -33,12 +33,21 @@ export async function postVenta({ data }) {
 
   // const descuentos =
 
-//   const item = {
-//     quantity: 1,
-//     daysMin: 60,
-//     countries: ["bolivia", "peru", "argentina", "chile", "mexico"],
-//   };
+  //   const item = {
+  //     quantity: 1,
+  //     daysMin: 60,
+  //     countries: ["bolivia", "peru", "argentina", "chile", "mexico"],
+  //   };
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
+
+  const descuentosFiltered = descuentos.filter((descuento) => {
+    const initialDate = new Date(descuento.fecha_desde);
+    const finalDate = new Date(descuento.fecha_hasta);
+
+    if (initialDate >= currentDate && finalDate <= currentDate)
+      return descuento;
+    return null;
+  });
 
   // const descuentosFiltered = descuentos.filter((descuento) => {
 
@@ -49,7 +58,7 @@ export async function postVenta({ data }) {
   //   const finalDate = new Date(descuento.fecha_hasta);
   //   if (
   //     initialDate <= currentDate &&
-  //     finalDate >= currentDate 
+  //     finalDate >= currentDate
   //   ) {
   //     return descuento;
   //   }
@@ -63,15 +72,22 @@ export async function postVenta({ data }) {
 
   //Crear Venta por pasajero
 
-
-
   //Agregar Extras por pasajero
 
   //Crear Poliza por pasajero
 
   //Crear Beneficiario por pasajero
 
-  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentos, currentDate : currentDate.toISOString().split('T')[0]}, "post");
+  return buildResponse(
+    200,
+    {
+      vouchers,
+      cantidad: vouchers.length,
+      descuentosFiltered,
+      currentDate: currentDate.toISOString().split("T")[0],
+    },
+    "post"
+  );
 }
 
 const redCardPrice = async ({
