@@ -20,7 +20,7 @@ export async function postVenta({ data }) {
     return buildResponse(400, { message: "Missing data" }, "post");
   }
 
-  const { servicio, multiviajes, vouchers, fecha_salida, fecha_retorno } = data;
+  const { servicio, multiviajes, vouchers, fecha_salida, fecha_retorno, destiny } = data;
 
   const currentDate = new Date();
 
@@ -113,7 +113,7 @@ export async function postVenta({ data }) {
     const nuevaPoliza = {
       venta_id,
       servicio_id: servicio,
-      destino: data.destiny,
+      destino: destiny,
       fecha_salida,
       fecha_retorno,
       extra: 0,
@@ -122,7 +122,6 @@ export async function postVenta({ data }) {
     };
 
     const poliza = await postPolizas({ data: nuevaPoliza, schema: "redcard" });
-    console.log({poliza});
 
     const poliza_id = poliza.insertId;
 
