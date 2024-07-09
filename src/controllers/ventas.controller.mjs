@@ -2,7 +2,7 @@ import { getPlanes } from "../models/coberturas.model.mjs";
 import { buildResponse } from "../utils/helpers.mjs";
 import { executeMysql } from "../utils/database.mjs";
 import { getCupones } from "../models/cupones.model.mjs";
-// import { postVentas } from "../models/ventas.model.mjs";
+import { postVentas } from "../models/ventas.model.mjs";
 
 
 export async function getVentas({ id }) {
