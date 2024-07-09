@@ -92,6 +92,8 @@ export async function postVenta({ data }) {
     0
   );
 
+  const totalPagar = parseFloat(price.aux_precio) - descuentoTotal * vouchers.length;
+
 
 
   // const descuentosFiltered = descuentos.filter((descuento) => {
@@ -132,6 +134,7 @@ export async function postVenta({ data }) {
       currentDate: currentDate.toISOString().split("T")[0],
       precio: price,
       descuentoTotal,
+      totalPagar,
     },
     "post"
   );
