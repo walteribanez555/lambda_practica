@@ -92,7 +92,7 @@ export async function postVenta({ data }) {
     0
   );
 
-  const totalPagar =( price.aux_precio - descuentoTotal) * vouchers.length;
+  const totalPagar =( price.aux_precio - descuentoTotal) ;
 
 
 
@@ -134,7 +134,7 @@ export async function postVenta({ data }) {
       currentDate: currentDate.toISOString().split("T")[0],
       precio: price,
       descuentoTotal,
-      totalPagar,
+      totalPagar : totalPagar * vouchers.length,
     },
     "post"
   );
