@@ -97,26 +97,26 @@ export async function postVenta({ data }) {
 
 
 
-  const nuevaVenta = { 
-    office_id  : 1,
-    username : 'walteribanez555@gmail.com',
-    cliente_id : 1,
-    tipo_venta : 5,
-    forma_pago : 1,
-    fecha_venta : currentDate.toISOString().split("T")[0],  
-    cantidad : 1,
-    precio : `${price.aux_precio}`,
-    total : `${price.aux_precio}`,
-    plus : 0,
-    tipo_descuento : `${2}`,
-    descuento : `${descuentoTotal}`,
-    tipo_valor : 1,
-    descuento_extra : 0,
-    total_pago : `${totalPagar}`,
-    client_secret : null,
-    status : 2,
-    comision : 0,
-  }
+  // const nuevaVenta = { 
+  //   office_id  : 1,
+  //   username : 'walteribanez555@gmail.com',
+  //   cliente_id : 1,
+  //   tipo_venta : 5,
+  //   forma_pago : 1,
+  //   fecha_venta : currentDate.toISOString().split("T")[0],  
+  //   cantidad : 1,
+  //   precio : `${price.aux_precio}`,
+  //   total : `${price.aux_precio}`,
+  //   plus : 0,
+  //   tipo_descuento : `${2}`,
+  //   descuento : `${descuentoTotal}`,
+  //   tipo_valor : 1,
+  //   descuento_extra : 0,
+  //   total_pago : `${totalPagar}`,
+  //   client_secret : null,
+  //   status : 2,
+  //   comision : 0,
+  // }
 
   // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta
@@ -163,7 +163,7 @@ export async function postVenta({ data }) {
       precio: price,
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
-      response : nuevaVenta,
+      // response : nuevaVenta,
     },
     "post"
   );
