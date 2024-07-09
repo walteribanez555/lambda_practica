@@ -44,7 +44,7 @@ export async function postVenta({ data }) {
 
     // if(descuento.oficina_id === null || descuento.oficina_id=== undefined ) return null;
 
-    // const policy = JSON.parse(descuento.oficina_id);
+    const policy = JSON.parse(descuento.oficina_id);
     // if (
     //   policy === null ||
     //   policy === undefined ||
