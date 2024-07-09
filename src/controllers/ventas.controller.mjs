@@ -44,7 +44,7 @@ export async function postVenta({ data }) {
     const initialDate = new Date(descuento.fecha_desde);
     const finalDate = new Date(descuento.fecha_hasta);
 
-    if (initialDate >= currentDate && finalDate <= currentDate)
+    if (initialDate <= currentDate && finalDate >= currentDate)
       return descuento;
     return null;
   });
