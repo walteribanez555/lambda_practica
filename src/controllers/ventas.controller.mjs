@@ -106,27 +106,41 @@ export async function postVenta({ data }) {
       comision: 0,
     };
 
-    const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
+    try {
+      const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
 
-    const venta_id = venta.insertId;
+      if (!venta || !venta.insertId) {
+        console.error("Failed to create venta:", venta);
+        continue;
+      }
 
-    const nuevaPoliza = {
-      venta_id,
-      servicio_id: servicio,
-      destino: data.destiny,
-      fecha_salida,
-      fecha_retorno,
-      extra: 0,
-      status: 2,
-      username: "walteribanez555@gmail.com",
-    };
+      const venta_id = venta.insertId;
+      ventas_id.push(venta_id);
 
-    const poliza = await postPolizas({ data: nuevaPoliza, schema: "redcard" });
+      const nuevaPoliza = {
+        venta_id,
+        servicio_id: servicio,
+        destino: data.destiny,
+        fecha_salida,
+        fecha_retorno,
+        extra: 0,
+        status: 2,
+        username: "walteribanez555@gmail.com",
+      };
 
-    const poliza_id = poliza.insertId;
+      const poliza = await postPolizas({ data: nuevaPoliza, schema: "redcard" });
 
-    ventas_id.push(venta_id);
-    polizas_id.push(poliza_id);
+      if (!poliza || !poliza.insertId) {
+        console.error("Failed to create poliza:", poliza);
+        continue;
+      }
+
+      const poliza_id = poliza.insertId;
+      polizas_id.push(poliza_id);
+
+    } catch (error) {
+      console.error("Error in processing voucher:", voucher, error);
+    }
   }
   // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta

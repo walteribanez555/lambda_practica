@@ -59,7 +59,7 @@ export async function postPolizas( { data, schema } ) {
         // newRegister.modificaciones = 0;
         delete newRegister.username;
         const response = await database.create( newRegister, keyField );
-        return buildResponse( 200, response, 'post', keyField, data );
+        return response;
     
     } catch ( error ) {
         colorLog( ` POST POLIZAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
