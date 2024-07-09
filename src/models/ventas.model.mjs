@@ -25,11 +25,11 @@ const model = {
 export async function postVentas( { data, schema } ){ 
     try{
         const database = new DatabaseOperations( tableName, schema );
-        const newRegister = validateData( data, model );
-        if ( Object.keys( newRegister ).length === 0 )
-            return buildResponse( 400, { message : 'Missing required fields or not valid' }, 'post' );
+        // const newRegister = validateData( data, model );
+        // if ( Object.keys( newRegister ).length === 0 )
+        //     return buildResponse( 400, { message : 'Missing required fields or not valid' }, 'post' );
 
-        const response = await database.create( newRegister, keyField );
+        const response = await database.create( data, keyField );
         return response;
 
     }catch(err) { 
