@@ -30,7 +30,7 @@ export async function postVentas( { data, schema } ){
         //     return buildResponse( 400, { message : 'Missing required fields or not valid' }, 'post' );
 
         const response = await database.create( data, keyField );
-        return response;
+        return {response, keyField};
 
     }catch(err) { 
         colorLog( ` POST VENTAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
