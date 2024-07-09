@@ -45,10 +45,10 @@ export async function postVenta({ data }) {
     const finalDate = new Date(descuento.fecha_hasta);
     if (
       initialDate <= currentDate &&
-      finalDate >= currentDate &&
-        policy.daysMin >= nroDias &&
-        policy.isApi  === 1 &&
-        cantidad % policy.quantity == 0
+      finalDate >= currentDate 
+        // policy.daysMin >= nroDias &&
+        // policy.isApi  === 1 &&
+        // cantidad % policy.quantity == 0
     ) {
       return true;
     }
