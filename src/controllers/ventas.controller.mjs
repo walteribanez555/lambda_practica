@@ -121,7 +121,7 @@ export async function postVenta({ data }) {
       cantidad: vouchers.length,
       descuentosFiltered,
       currentDate: currentDate.toISOString().split("T")[0],
-      precio: nroDias,
+      precio: price,
     },
     "post"
   );
