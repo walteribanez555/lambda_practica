@@ -39,7 +39,7 @@ export async function postVenta({ data }) {
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
   const descuentosFiltered = descuentos.filter((descuento) => {
-    const policy  = JSON.parse(descuento.oficina_id);
+    // const policy  = JSON.parse(descuento.oficina_id);
     const currentDate = new Date();
     const initialDate = new Date(descuento.fecha_desde);
     const finalDate = new Date(descuento.fecha_hasta);
@@ -70,7 +70,7 @@ export async function postVenta({ data }) {
 
   //Crear Beneficiario por pasajero
 
-  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentosFiltered}, "post");
+  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentos}, "post");
 }
 
 const redCardPrice = async ({
