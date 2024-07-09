@@ -42,7 +42,15 @@ export async function postVenta({ data }) {
 
   const descuentosFiltered = descuentos.filter((descuento) => {
     const policy = JSON.parse(descuento.oficina_id);
-    if (policy === null || policy === undefined) return null;
+    if (
+      policy === null ||
+      policy === undefined ||
+      policy.isApi == undefined ||
+      policy.isApi == null ||
+      policy.quantity == null ||
+      policy.quantity == undefined
+    )
+      return null;
 
     const initialDate = new Date(descuento.fecha_desde);
     const finalDate = new Date(descuento.fecha_hasta);
