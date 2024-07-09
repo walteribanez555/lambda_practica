@@ -42,8 +42,7 @@ export async function getCupones({ id, schema }) {
 
       if (
         cupon.fecha_desde <= currentDate &&
-        cupon.fecha_hasta >= currentDate &&
-        cuponApi === 'api'
+        cupon.fecha_hasta >= currentDate
         
       ) {
         return true;
@@ -55,7 +54,6 @@ export async function getCupones({ id, schema }) {
 
         cupon.description = cuponDetails.description;
 
-        delete cupon.oficina_id;
         return cupon;
 
     })
