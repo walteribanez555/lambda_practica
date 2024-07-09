@@ -114,7 +114,7 @@ export async function postVenta({ data }) {
         continue;
       }
 
-      const venta_id = venta.insertId;
+      const venta_id = venta.response.insertId;
       ventas_id.push(venta_id);
 
       const nuevaPoliza = {
