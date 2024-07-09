@@ -47,15 +47,15 @@ export async function postVenta({ data }) {
     if(descuento.oficina_id == null || descuento.oficina_id.length == 0  ) return null;
 
     const policy = JSON.parse(descuento.oficina_id);
-    // if (
-    //   policy === null ||
-    //   policy === undefined ||
-    //   policy.isApi == undefined ||
-    //   policy.isApi == null ||
-    //   policy.quantity == null ||
-    //   policy.quantity == undefined
-    // )
-    //   return null;
+    if (
+      policy === null ||
+      policy.quantity == null ||
+      policy.isApi == null ||
+      policy.quantity == undefined ||
+      policy === undefined ||
+      policy.isApi == undefined 
+    )
+      return null;
 
     const initialDate = new Date(descuento.fecha_desde);
     const finalDate = new Date(descuento.fecha_hasta);
