@@ -38,20 +38,20 @@ export async function postVenta({ data }) {
 //   };
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
-  // const descuentosFiltered = descuentos.filter((descuento) => {
-  //   const policy  = JSON.parse(descuento.oficina_id);
-  //   const currentDate = new Date();
-  //   if (
-  //     descuento.fecha_desde <= currentDate &&
-  //     descuento.fecha_hasta >= currentDate &&
-  //       policy.daysMin >= nroDias &&
-  //       policy.isApi  === 1 &&
-  //       cantidad % policy.quantity == 0
-  //   ) {
-  //     return true;
-  //   }
-  //   return false;
-  // });
+  const descuentosFiltered = descuentos.filter((descuento) => {
+    const policy  = JSON.parse(descuento.oficina_id);
+    const currentDate = new Date();
+    if (
+      descuento.fecha_desde <= currentDate &&
+      descuento.fecha_hasta >= currentDate &&
+        policy.daysMin >= nroDias &&
+        policy.isApi  === 1 &&
+        cantidad % policy.quantity == 0
+    ) {
+      return true;
+    }
+    return false;
+  });
 
   // const montoDescuentoPersona = descuentosFiltered.reduce(
   //   (acc, descuento) => acc + parseFloat(descuento.valor),
@@ -68,7 +68,7 @@ export async function postVenta({ data }) {
 
   //Crear Beneficiario por pasajero
 
-  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentos}, "post");
+  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentosFiltered}, "post");
 }
 
 const redCardPrice = async ({
