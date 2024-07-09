@@ -79,7 +79,7 @@ export async function postVenta({ data }) {
     multiviajes,
     nroDias,
     cantidad: 1,
-    tipo_descuento: 1,
+    tipo_descuento: 2,
     descuento: 0,
   });
 
