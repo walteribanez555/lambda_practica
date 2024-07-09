@@ -70,18 +70,18 @@ export async function postVenta({ data }) {
     return null;
   });
 
-  initalDate = new Date(fecha_salida);
-  finalDate = new Date(fecha_retorno);
-  nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24);
-  const price = await redCardPrice({
-    schema : "redcard",
-    servicio,
-    multiviajes,
-    nroDias,
-    cantidad: 1,
-    tipo_descuento: 2,
-    descuento: 0,
-  });
+  const initalDate = new Date(fecha_salida);
+  const finalDate = new Date(fecha_retorno);
+  const nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24);
+  // const price = await redCardPrice({
+  //   schema : "redcard",
+  //   servicio,
+  //   multiviajes,
+  //   nroDias,
+  //   cantidad: 1,
+  //   tipo_descuento: 2,
+  //   descuento: 0,
+  // });
 
 
 
@@ -121,7 +121,7 @@ export async function postVenta({ data }) {
       cantidad: vouchers.length,
       descuentosFiltered,
       currentDate: currentDate.toISOString().split("T")[0],
-      precio: price,
+      precio: nroDias,
     },
     "post"
   );
