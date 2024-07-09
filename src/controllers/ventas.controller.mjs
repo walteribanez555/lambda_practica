@@ -74,7 +74,7 @@ export async function postVenta({ data }) {
   finalDate = new Date(fecha_retorno);
   nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24);
   const price = await redCardPrice({
-    schema,
+    schema : "redcard",
     servicio,
     multiviajes,
     nroDias,
