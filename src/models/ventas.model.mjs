@@ -17,10 +17,7 @@ const model = {
     descuento : 'string',
     tipo_descuento : 'string',
     plus : 'number',
-    fecha_salida : 'string',
-    fecha_retorno : 'string',
     servicio_id : 'string',
-    multiviajes : 'string',
     status : 'number'
 };
 

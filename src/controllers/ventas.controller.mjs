@@ -105,7 +105,7 @@ export async function postVenta({ data }) {
     tipo_venta : 5,
     forma_pago : 1,
     fecha_venta : currentDate.toISOString().split("T")[0],  
-    cantidad : 1,
+    cantidad : `${1}`,
     precio : `${price.aux_precio}`,
     total : `${price.aux_precio}`,
     plus : 0,
