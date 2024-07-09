@@ -101,7 +101,7 @@ export async function postVenta({ data }) {
   const ventas_id = [];
   const polizas_id = [];
 
-vouchers.forEach(async voucher => {
+await vouchers.forEach(async voucher => {
 
   
   const nuevaVenta = { 
