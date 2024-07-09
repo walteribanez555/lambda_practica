@@ -101,7 +101,7 @@ export async function postVenta({ data }) {
   const nuevaVenta = { 
     office_id  : 1,
     username : 'walteribanez555@gmail.com',
-    cliente_id : 1,
+    cliente_id : 29,
     tipo_venta : 5,
     forma_pago : 1,
     fecha_venta : currentDate.toISOString().split("T")[0],  
