@@ -3,6 +3,7 @@ import { buildResponse } from "../utils/helpers.mjs";
 import { executeMysql } from "../utils/database.mjs";
 import { getCupones } from "../models/cupones.model.mjs";
 import { postVentas } from "../models/ventas.model.mjs";
+import { postPolizas } from "../models/polizas.model.mjs";
 
 
 export async function getVentas({ id }) {
@@ -97,7 +98,12 @@ export async function postVenta({ data }) {
   const totalPagar =( price.aux_precio - descuentoTotal) ;
 
 
+  const ventas_id = [];
+  const polizas_id = [];
 
+vouchers.forEach(async voucher => {
+
+  
   const nuevaVenta = { 
     office_id  : 1,
     username : 'walteribanez555@gmail.com',
@@ -118,8 +124,32 @@ export async function postVenta({ data }) {
     comision : 0,
   }
 
-
   const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
+
+  venta_id = venta.insertId;
+
+  const nuevaPoliza = {
+    venta_id,
+    servicio_id: servicio,
+    destino: data.destiny,
+    fecha_salida,
+    fecha_retorno,
+    extra: 0,
+    status: 2,
+    username: "walteribanez555@gmail.com",
+  }
+
+  const poliza = await postPolizas({ data: nuevaPoliza, schema: "redcard" });
+
+  const poliza_id = poliza.insertId;
+
+
+  ventas_id.push(venta_id);
+  polizas_id.push(poliza_id);
+
+  
+});
+
   // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta
 
@@ -166,7 +196,8 @@ export async function postVenta({ data }) {
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
       // response : venta,
-      venta,
+      ventas_id,
+      poliza_id : polizas_id
     },
     "post"
   );

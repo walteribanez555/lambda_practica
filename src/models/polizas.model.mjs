@@ -2,6 +2,21 @@ import { executeMysql } from '../utils/database.mjs';
 import { buildResponse, colorLog } from '../utils/helpers.mjs';
 
 
+const tableName = 'polizas';
+const keyField = 'poliza_id';
+
+const model = {
+    venta_id : 'number',
+    servicio_id : 'number',
+    destino : 'string',
+    fecha_salida : 'string',
+    fecha_retorno : 'string',
+    extra : 'number',
+    status : 'number', 
+    username : 'string',
+};
+
+
 export async function getPolizas( { id, schema } ) {
     try {
 
@@ -24,5 +39,30 @@ export async function getPolizas( { id, schema } ) {
     } catch ( error ) {
         colorLog( ` GET REPORTE DE POLIZAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
         return buildResponse( 500, error, 'get' );
+    }
+
+
+}
+
+export async function postPolizas( { data, schema } ) {
+    try {
+        const database = new DatabaseOperations( tableName, schema );
+        const newRegister = validateData( data, model );
+        if ( Object.keys( newRegister ).length === 0 )
+            return buildResponse( 400, { message : 'Missing required fields or not valid' }, 'post' );
+
+        newRegister.nro_poliza = null;
+        newRegister.nro_dias = dateDiff( newRegister.fecha_salida, newRegister.fecha_retorno ) + 1;
+        newRegister.fecha_emision = dateFormat();
+        // newRegister.fecha_caducidad = data.fecha_caducidad ? data.fecha_caducidad : newRegister.fecha_retorno;
+        // newRegister.observaciones = `[Poliza creada. USUARIO : ${ newRegister.username }],`;
+        // newRegister.modificaciones = 0;
+        delete newRegister.username;
+        const response = await database.create( newRegister, keyField );
+        return buildResponse( 200, response, 'post', keyField, data );
+    
+    } catch ( error ) {
+        colorLog( ` POST POLIZAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
+        return buildResponse( 500, error, 'post' );
     }
 }
