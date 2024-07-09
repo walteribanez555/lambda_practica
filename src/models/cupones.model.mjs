@@ -28,7 +28,7 @@ export async function getCupones({ id, schema }) {
       },
     };
     const response = await database.read(data);
-    return buildResponse(200, response, "get");
+    return response;
   } catch (error) {
     colorLog(` GET CUPONES ERROR:  ${JSON.stringify(error)}`, "red", "reset");
     return buildResponse(500, error, "get");

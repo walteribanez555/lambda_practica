@@ -19,15 +19,15 @@ export async function postVenta({ data }) {
 
   const { servicio, multiviajes, nroDias, vouchers } = data;
 
-  const precio = await redCardPrice({
-    schema: "redcard",
-    servicio,
-    multiviajes: multiviajes,
-    nroDias,
-    cantidad: 1,
-    tipo_descuento: 1,
-    descuento: 0,
-  });
+  // const precio = await redCardPrice({
+  //   schema: "redcard",
+  //   servicio,
+  //   multiviajes: multiviajes,
+  //   nroDias,
+  //   cantidad: 1,
+  //   tipo_descuento: 1,
+  //   descuento: 0,
+  // });
 
   // const descuentos =
 
@@ -38,25 +38,25 @@ export async function postVenta({ data }) {
 //   };
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
-  const descuentosFiltered = descuentos.filter((descuento) => {
-    const policy  = JSON.parse(descuento.oficina_id);
-    const currentDate = new Date();
-    if (
-      descuento.fecha_desde <= currentDate &&
-      descuento.fecha_hasta >= currentDate &&
-        policy.daysMin >= nroDias &&
-        policy.isApi  === 1 &&
-        cantidad % policy.quantity == 0
-    ) {
-      return true;
-    }
-    return false;
-  });
+  // const descuentosFiltered = descuentos.filter((descuento) => {
+  //   const policy  = JSON.parse(descuento.oficina_id);
+  //   const currentDate = new Date();
+  //   if (
+  //     descuento.fecha_desde <= currentDate &&
+  //     descuento.fecha_hasta >= currentDate &&
+  //       policy.daysMin >= nroDias &&
+  //       policy.isApi  === 1 &&
+  //       cantidad % policy.quantity == 0
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // });
 
-  const montoDescuentoPersona = descuentosFiltered.reduce(
-    (acc, descuento) => acc + parseFloat(descuento.valor),
-    0
-  );
+  // const montoDescuentoPersona = descuentosFiltered.reduce(
+  //   (acc, descuento) => acc + parseFloat(descuento.valor),
+  //   0
+  // );
 
   //Crear Venta por pasajero
 
