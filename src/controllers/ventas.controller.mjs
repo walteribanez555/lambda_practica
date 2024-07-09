@@ -45,7 +45,6 @@ export async function postVenta({ data }) {
       descuento.fecha_desde <= currentDate &&
       descuento.fecha_hasta >= currentDate &&
         policy.daysMin >= nroDias &&
-        policy.countries.includes(data.destiny) &&
         policy.isApi  === 1 &&
         cantidad % policy.quantity == 0
     ) {
