@@ -62,7 +62,9 @@ export async function postVenta({ data }) {
 
     if (
       initialDate <= currentDate &&
-      finalDate >= currentDate 
+      finalDate >= currentDate &&
+      vouchers.length % policy.quantity == 0 &&
+      policy.isApi == 1
     )
       return descuento;
     return null;
