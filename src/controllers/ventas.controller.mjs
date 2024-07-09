@@ -41,10 +41,18 @@ export async function postVenta({ data }) {
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
   const descuentosFiltered = descuentos.filter((descuento) => {
+    const policy = JSON.parse(descuento.oficina_id);
+    if (policy === null || policy === undefined) return null;
+
     const initialDate = new Date(descuento.fecha_desde);
     const finalDate = new Date(descuento.fecha_hasta);
 
-    if (initialDate <= currentDate && finalDate >= currentDate)
+    if (
+      initialDate <= currentDate &&
+      finalDate >= currentDate &&
+      policy.isApi == 1 &&
+      vouchers.length % policy.quantity == 0
+    )
       return descuento;
     return null;
   });
