@@ -122,6 +122,7 @@ export async function postVenta({ data }) {
     };
 
     const poliza = await postPolizas({ data: nuevaPoliza, schema: "redcard" });
+    console.log({poliza});
 
     const poliza_id = poliza.insertId;
 
