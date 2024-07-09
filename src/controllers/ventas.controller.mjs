@@ -76,7 +76,7 @@ export async function postVenta({ data }) {
   const price = await redCardPrice({
     schema : "redcard",
     servicio,
-    multiviajes,
+    multiviajes : (multiviajes !== undefined) ? multiviajes : null,
     nroDias,
     cantidad: 1,
     tipo_descuento: 2,
