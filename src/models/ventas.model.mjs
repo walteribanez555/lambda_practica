@@ -1,7 +1,7 @@
 import { DatabaseOperations, executeMysql } from '../utils/database.mjs';
 import { buildResponse, validateData, colorLog, dateFormat, dateDiff, dateNow, parseJsonToObject } from '../utils/helpers.mjs';
-import Stripe from 'stripe';
-const stripe = new Stripe( process.env.STRIPE_TOKEN );
+// import Stripe from 'stripe';
+// const stripe = new Stripe( process.env.STRIPE_TOKEN );
 
 
 const tableName = 'ventas';
