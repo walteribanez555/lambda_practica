@@ -28,41 +28,9 @@ export async function getCupones({ id, schema }) {
       },
     };
     const response = await database.read(data);
-
-    const currentDate = new Date();
-
-    const responseFiltered = response.filter((cupon) => {
-
-
-        const cuponDetail = cupon.nombre.split('-');
-        const cuponApi = cuponDetail[cuponDetail.length - 1];
-
-
-
-
-      if (
-        cupon.fecha_desde <= currentDate &&
-        cupon.fecha_hasta >= currentDate
-        
-      ) {
-        return true;
-      }
-      return false;
-    }).map( cupon => {
-
-        const cuponDetails = JSON.parse(cupon.oficina_id);
-
-        cupon.description = cuponDetails.description;
-
-        return cupon;
-
-    })
-
-    return responseFiltered;
+    return buildResponse(200, response, "get");
   } catch (error) {
-    throw error;
+    colorLog(` GET CUPONES ERROR:  ${JSON.stringify(error)}`, "red", "reset");
+    return buildResponse(500, error, "get");
   }
 }
-
-
-
