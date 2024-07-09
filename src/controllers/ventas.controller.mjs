@@ -17,7 +17,7 @@ export async function postVenta({ data }) {
     return buildResponse(400, { message: "Missing data" }, "post");
   }
 
-  const { servicio, multiviajes, nroDias, vouchers } = data;
+  const { servicio, multiviajes, vouchers, fecha_salida, fecha_retorno } = data;
 
   const currentDate = new Date();
 
@@ -70,6 +70,21 @@ export async function postVenta({ data }) {
     return null;
   });
 
+  initalDate = new Date(fecha_salida);
+  finalDate = new Date(fecha_retorno);
+  nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24);
+  const price = await redCardPrice({
+    schema,
+    servicio,
+    multiviajes,
+    nroDias,
+    cantidad: 1,
+    tipo_descuento: 1,
+    descuento: 0,
+  });
+
+
+
   // const descuentosFiltered = descuentos.filter((descuento) => {
 
   //   if(descuento.oficina_id === null || descuento.oficina_id=== undefined ) return null;
@@ -106,6 +121,7 @@ export async function postVenta({ data }) {
       cantidad: vouchers.length,
       descuentosFiltered,
       currentDate: currentDate.toISOString().split("T")[0],
+      precio: price,
     },
     "post"
   );
