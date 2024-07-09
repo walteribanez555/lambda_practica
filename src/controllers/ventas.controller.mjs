@@ -19,6 +19,8 @@ export async function postVenta({ data }) {
 
   const { servicio, multiviajes, nroDias, vouchers } = data;
 
+  const currentDate = new Date();
+
   // const precio = await redCardPrice({
   //   schema: "redcard",
   //   servicio,
@@ -38,22 +40,22 @@ export async function postVenta({ data }) {
 //   };
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
-  const descuentosFiltered = descuentos.filter((descuento) => {
-    // const policy  = JSON.parse(descuento.oficina_id);
-    const currentDate = new Date();
-    const initialDate = new Date(descuento.fecha_desde);
-    const finalDate = new Date(descuento.fecha_hasta);
-    if (
-      initialDate <= currentDate &&
-      finalDate >= currentDate 
-        // policy.daysMin >= nroDias &&
-        // policy.isApi  === 1 &&
-        // cantidad % policy.quantity == 0
-    ) {
-      return true;
-    }
-    return false;
-  });
+  // const descuentosFiltered = descuentos.filter((descuento) => {
+  //   // const policy  = JSON.parse(descuento.oficina_id);
+  //   const currentDate = new Date();
+  //   const initialDate = new Date(descuento.fecha_desde);
+  //   const finalDate = new Date(descuento.fecha_hasta);
+  //   if (
+  //     initialDate <= currentDate &&
+  //     finalDate >= currentDate 
+  //       // policy.daysMin >= nroDias &&
+  //       // policy.isApi  === 1 &&
+  //       // cantidad % policy.quantity == 0
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // });
 
   // const montoDescuentoPersona = descuentosFiltered.reduce(
   //   (acc, descuento) => acc + parseFloat(descuento.valor),
@@ -70,7 +72,7 @@ export async function postVenta({ data }) {
 
   //Crear Beneficiario por pasajero
 
-  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentosFiltered, currentDate}, "post");
+  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentosFiltered, currentDate : currentDate.toISOString().split('T')[0]}, "post");
 }
 
 const redCardPrice = async ({
