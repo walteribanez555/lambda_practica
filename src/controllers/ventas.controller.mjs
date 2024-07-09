@@ -72,7 +72,7 @@ export async function postVenta({ data }) {
 
   //Crear Beneficiario por pasajero
 
-  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentosFiltered, currentDate : currentDate.toISOString().split('T')[0]}, "post");
+  return buildResponse(200, { vouchers, cantidad: vouchers.length, descuentos, currentDate : currentDate.toISOString().split('T')[0]}, "post");
 }
 
 const redCardPrice = async ({
