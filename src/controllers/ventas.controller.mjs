@@ -84,6 +84,15 @@ export async function postVenta({ data }) {
   });
 
 
+  const descuentoTotal = descuentosFiltered.reduce(
+    (acc, descuento) => acc + ( descuento.tipo_valor == 1 ?
+      parseFloat(price.aux_precio) * (parseFloat(descuento.valor) / 100) : 
+      parseFloat(descuento.valor)
+      ),
+    0
+  );
+
+
 
   // const descuentosFiltered = descuentos.filter((descuento) => {
 
@@ -122,6 +131,7 @@ export async function postVenta({ data }) {
       descuentosFiltered,
       currentDate: currentDate.toISOString().split("T")[0],
       precio: price,
+      descuentoTotal,
     },
     "post"
   );
