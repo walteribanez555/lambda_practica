@@ -2,6 +2,7 @@ import { getPlanes } from "../models/coberturas.model.mjs";
 import { buildResponse } from "../utils/helpers.mjs";
 import { executeMysql } from "../utils/database.mjs";
 import { getCupones } from "../models/cupones.model.mjs";
+import { postVentas } from "../models/ventas.model.mjs";
 
 export async function getVentas({ id }) {
   return await getPlanes({ id, schema: "redcard" });
@@ -96,6 +97,30 @@ export async function postVenta({ data }) {
 
 
 
+  const nuevaVenta = { 
+    office_id  : 1,
+    username : 'walteribanez555@gmail.com',
+    fecha_venta : currentDate.toISOString().split("T")[0],  
+    forma_pago : 1,
+    tipo_venta : 5,
+    cantidad : 1,
+    precio : price.aux_precio,
+    total : price.aux_precio,
+    plus : 0,
+    comision : 0,
+    tipo_descuento : 2,
+    descuento : descuentoTotal,
+    descuento_extra : 0,
+    total_pago : totalPagar,
+    status : 2,
+  }
+
+  const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
+  //Crear Venta
+
+
+
+
   // const descuentosFiltered = descuentos.filter((descuento) => {
 
   //   if(descuento.oficina_id === null || descuento.oficina_id=== undefined ) return null;
@@ -135,6 +160,7 @@ export async function postVenta({ data }) {
       precio: price,
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
+      response : venta,
     },
     "post"
   );

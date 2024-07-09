@@ -31,10 +31,9 @@ export async function postVentas( { data, schema } ){
 
         const newRegister = data;
 
-        
+        const response = await database.create( newRegister, keyField );
 
-
-
+        return response;
 
     }catch(err) { 
         colorLog( ` POST VENTAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
