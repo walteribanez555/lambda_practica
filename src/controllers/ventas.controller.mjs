@@ -92,7 +92,7 @@ export async function postVenta({ data }) {
     0
   );
 
-  const totalPagar =( parseFloat(price.aux_precio) - descuentoTotal) ;
+  const totalPagar =( price.aux_precio - descuentoTotal) ;
 
 
 
