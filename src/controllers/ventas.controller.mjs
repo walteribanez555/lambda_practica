@@ -1,72 +1,145 @@
-
 import { getPlanes } from "../models/coberturas.model.mjs";
 import { buildResponse } from "../utils/helpers.mjs";
 import { executeMysql } from "../utils/database.mjs";
+import { getCupones } from "../models/cupones.model.mjs";
 
-
-export async function getVentas({id}){
-    return await getPlanes({ id, schema : 'redcard'});
+export async function getVentas({ id }) {
+  return await getPlanes({ id, schema: "redcard" });
 }
 
+export async function postVenta({ data }) {
+  if (
+    !data.fecha_salida ||
+    !data.fecha_retorno ||
+    !data.destiny ||
+    !data.vouchers
+  ) {
+    return buildResponse(400, { message: "Missing data" }, "post");
+  }
 
+  const { servicio, multiviajes, nroDias, vouchers } = data;
 
-export async function postVenta({ data  } ) { 
-    if( !data.fecha_salida || !data.fecha_retorno || !data.destiny || !data.vouchers  ){
-        return buildResponse(400, {message : "Missing data"}, 'post');
+  const precio = await redCardPrice({
+    schema: "redcard",
+    servicio,
+    multiviajes: multiviajes,
+    nroDias,
+    cantidad: 1,
+    tipo_descuento: 1,
+    descuento: 0,
+  });
+
+  // const descuentos =
+
+//   const item = {
+//     quantity: 1,
+//     daysMin: 60,
+//     countries: ["bolivia", "peru", "argentina", "chile", "mexico"],
+//   };
+  const descuentos = await getCupones({ schema: "redcard", id: servicio });
+
+  const descuentosFiltered = descuentos.filter((descuento) => {
+    const policy  = JSON.parse(descuento.oficina_id);
+    const currentDate = new Date();
+    if (
+      descuento.fecha_desde <= currentDate &&
+      descuento.fecha_hasta >= currentDate &&
+        policy.daysMin >= nroDias &&
+        policy.countries.includes(data.destiny) &&
+        policy.isApi  === 1 &&
+        cantidad % policy.quantity == 0
+    ) {
+      return true;
     }
+    return false;
+  });
 
+  const montoDescuentoPersona = descuentosFiltered.reduce(
+    (acc, descuento) => acc + parseFloat(descuento.valor),
+    0
+  );
 
-    const { servicio, multiviajes , nroDias, vouchers } = data;
-
-    const precio = await redCardPrice({ schema : 'redcard', servicio, multiviajes : multiviajes , nroDias, cantidad : 1, tipo_descuento : 1, descuento : 0 });
-    
-
-
-    //Crear Venta por pasajero
-
-    //Agregar Extras por pasajero
-
-    //Crear Poliza por pasajero
-
-    //Crear Beneficiario por pasajero
+  //Crear Venta por pasajero
 
 
 
-    return buildResponse(200, { vouchers, cantidad: vouchers.length }, 'post');
+  //Agregar Extras por pasajero
 
+  //Crear Poliza por pasajero
+
+  //Crear Beneficiario por pasajero
+
+  return buildResponse(200, { vouchers, cantidad: vouchers.length, montoDescuentoPersona }, "post");
 }
 
+const redCardPrice = async ({
+  schema,
+  servicio,
+  multiviajes,
+  nroDias,
+  cantidad,
+  tipo_descuento,
+  descuento,
+}) => {
+  try {
+    const sql = `select precio, limite_superior, limite_inferior, pendiente from precios where servicio_id = ${servicio}`;
+    const precios = await executeMysql(sql, schema);
 
-
-const redCardPrice = async( { schema, servicio, multiviajes, nroDias, cantidad, tipo_descuento, descuento } ) => {
-    try {
-        const sql =  `select precio, limite_superior, limite_inferior, pendiente from precios where servicio_id = ${ servicio }`;
-        const precios = await executeMysql( sql, schema );
-
-        if ( multiviajes ) {
-            const sql =  `select codigo as precio from catalogos where catalogo = 'multiviajes' and nivel = ${ servicio } and etiqueta = '${ multiviajes.duracion }'`;
-            const aux_precio = await executeMysql( sql, schema );
-            const aux_descuento = aux_precio.length > 0 ? tipo_descuento === 1 && descuento > 0 ? ( cantidad * parseFloat( aux_precio[0].precio ) ) * ( descuento / 100 ) : descuento : 0;
-            return { aux_precio : aux_precio.length > 0 ? parseFloat( aux_precio[0].precio ) : 0, aux_descuento, fecha_caducidad : multiviajes.fecha_caducidad };
-        }
-
-        if ( nroDias < 5 ) {
-            const aux_precio = precios.filter( precio => precio.limite_superior === 5 )[ 0 ].precio;
-            const aux_descuento = tipo_descuento === 1 && descuento > 0 ? ( cantidad * aux_precio ) * ( descuento / 100 ) : descuento;
-            return { aux_precio, aux_descuento };
-        }
-  
-        const precioRango = precios.filter( precio =>  precio.limite_superior  <= nroDias );
-        const precioSinRango = precios.filter( precio => precio.limite_inferior > precioRango[ precioRango.length - 1 ].limite_superior );
-  
-        const diferencia = nroDias - precioRango[ precioRango.length - 1 ].limite_superior;
-        const aux = parseFloat( diferencia * precioRango[ precioRango.length - 1 ].pendiente + precioRango[ precioRango.length - 1 ].precio );
-        const aux_precio = precioSinRango.length > 0 && aux > parseFloat( precioSinRango[0].precio ) ? parseFloat( precioSinRango[0].precio ) : aux;
-        const aux_descuento = tipo_descuento === 1 && descuento > 0 ? ( cantidad * aux_precio ) * ( descuento / 100 ) : descuento;        
-
-        return { aux_precio, aux_descuento };
-    } catch ( error ) {
-        colorLog( ` redCardPrice ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
-        return buildResponse( 500, error, 'get' );
+    if (multiviajes) {
+      const sql = `select codigo as precio from catalogos where catalogo = 'multiviajes' and nivel = ${servicio} and etiqueta = '${multiviajes.duracion}'`;
+      const aux_precio = await executeMysql(sql, schema);
+      const aux_descuento =
+        aux_precio.length > 0
+          ? tipo_descuento === 1 && descuento > 0
+            ? cantidad * parseFloat(aux_precio[0].precio) * (descuento / 100)
+            : descuento
+          : 0;
+      return {
+        aux_precio:
+          aux_precio.length > 0 ? parseFloat(aux_precio[0].precio) : 0,
+        aux_descuento,
+        fecha_caducidad: multiviajes.fecha_caducidad,
+      };
     }
+
+    if (nroDias < 5) {
+      const aux_precio = precios.filter(
+        (precio) => precio.limite_superior === 5
+      )[0].precio;
+      const aux_descuento =
+        tipo_descuento === 1 && descuento > 0
+          ? cantidad * aux_precio * (descuento / 100)
+          : descuento;
+      return { aux_precio, aux_descuento };
+    }
+
+    const precioRango = precios.filter(
+      (precio) => precio.limite_superior <= nroDias
+    );
+    const precioSinRango = precios.filter(
+      (precio) =>
+        precio.limite_inferior >
+        precioRango[precioRango.length - 1].limite_superior
+    );
+
+    const diferencia =
+      nroDias - precioRango[precioRango.length - 1].limite_superior;
+    const aux = parseFloat(
+      diferencia * precioRango[precioRango.length - 1].pendiente +
+        precioRango[precioRango.length - 1].precio
+    );
+    const aux_precio =
+      precioSinRango.length > 0 && aux > parseFloat(precioSinRango[0].precio)
+        ? parseFloat(precioSinRango[0].precio)
+        : aux;
+    const aux_descuento =
+      tipo_descuento === 1 && descuento > 0
+        ? cantidad * aux_precio * (descuento / 100)
+        : descuento;
+
+    return { aux_precio, aux_descuento };
+  } catch (error) {
+    colorLog(` redCardPrice ERROR:  ${JSON.stringify(error)}`, "red", "reset");
+    return buildResponse(500, error, "get");
+  }
 };
