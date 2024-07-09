@@ -72,7 +72,7 @@ export async function postVenta({ data }) {
 
   const initalDate = new Date(fecha_salida);
   const finalDate = new Date(fecha_retorno);
-  const nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24);
+  const nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24) +1;
   // const price = await redCardPrice({
   //   schema : "redcard",
   //   servicio,
