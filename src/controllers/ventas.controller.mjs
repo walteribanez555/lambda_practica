@@ -118,7 +118,7 @@ export async function postVenta({ data }) {
     comision : 0,
   }
 
-  const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
+  // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta
 
 
@@ -163,7 +163,7 @@ export async function postVenta({ data }) {
       precio: price,
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
-      response : venta,
+      response : nuevaVenta,
     },
     "post"
   );
