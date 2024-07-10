@@ -62,6 +62,7 @@ export async function postPolizas( { data, schema } ) {
         return response;
     
     } catch ( error ) {
+        console.log(error);
         colorLog( ` POST POLIZAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
         return buildResponse( 500, error, 'post' );
     }
