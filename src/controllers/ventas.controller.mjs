@@ -192,12 +192,10 @@ export async function postVenta({ data }) {
     {
       vouchers,
       cantidad: vouchers.length,
-      descuentosFiltered,
       currentDate: currentDate.toISOString().split("T")[0],
-      precio: price,
+      precio: price.aux_precio,
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
-      // response : venta,
       poliza_id : polizas_id,
     },
     "post"
