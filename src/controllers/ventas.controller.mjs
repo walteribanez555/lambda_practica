@@ -83,9 +83,6 @@ export async function postVenta({ data }) {
   const totalPagar =( price.aux_precio - descuentoTotal) ;
 
 
-  const ventas_id = [];
-  const polizas_id = [];
-  const beneficiarios_id = [];
 
  for (const voucher of vouchers) {
     const nuevaVenta = { 
@@ -145,7 +142,7 @@ export async function postVenta({ data }) {
 
     const beneficiario_id = beneficiario.insertId;
 
-    voucher.poliza_id = poliza_id;
+    voucher.voucher_id = poliza_id;
     voucher.beneficiario_id = beneficiario_id;
     voucher.venta_id = venta_id;
 
