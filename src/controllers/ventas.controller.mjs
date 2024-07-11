@@ -4,6 +4,7 @@ import { executeMysql } from "../utils/database.mjs";
 import { getCupones } from "../models/cupones.model.mjs";
 import { postVentas } from "../models/ventas.model.mjs";
 import { postPolizas } from "../models/polizas.model.mjs";
+import { postBeneficiarios } from "../models/beneficiarios.model.mjs";
 
 
 export async function getVentas({ id }) {
@@ -84,6 +85,7 @@ export async function postVenta({ data }) {
 
   const ventas_id = [];
   const polizas_id = [];
+  const beneficiarios_id = [];
 
  for (const voucher of vouchers) {
     const nuevaVenta = { 
@@ -125,8 +127,30 @@ export async function postVenta({ data }) {
 
     const poliza_id = poliza.insertId;
 
+    const nuevoBeneficiario = {
+      poliza_id,
+      primer_apellido: voucher.apellidos,
+      segundo_apellido: '0',
+      primer_nombre: voucher.nombres,
+      segundo_nombre: '0',
+      nro_identificacion: voucher.nro_identificacion,
+      fecha_nacimiento: voucher.fecha_nacimiento,
+      edad: voucher.edad,
+      origen: voucher.origen,
+      email: voucher.email,
+      telefono: voucher.telefono,
+    };
+
+    const beneficiario = await postBeneficiarios({ data: nuevoBeneficiario, schema: "redcard" });
+
+    const beneficiario_id = beneficiario.response.insertId;
+
+
+
+
     ventas_id.push(venta_id);
     polizas_id.push(poliza_id);
+    beneficiarios_id.push(beneficiario_id);
   }
   // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta
@@ -175,7 +199,8 @@ export async function postVenta({ data }) {
       totalPagar : totalPagar * vouchers.length,
       // response : venta,
       ventas_id,
-      poliza_id : polizas_id
+      poliza_id : polizas_id,
+      beneficiarios_id,
     },
     "post"
   );

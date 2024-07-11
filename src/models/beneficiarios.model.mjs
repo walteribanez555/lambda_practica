@@ -1,5 +1,8 @@
+
+// Dependencies
 import { DatabaseOperations } from '../utils/database.mjs';
 import { buildResponse, validateData, colorLog, age } from '../utils/helpers.mjs';
+
 
 const tableName = 'beneficiarios';
 const idField = 'beneficiario_id';
@@ -19,3 +22,22 @@ const model = {
     telefono : 'string'
 };
 
+
+
+export async function postBeneficiarios( { data, schema } ) {
+    try {
+        const database = new DatabaseOperations( tableName, schema );
+        const newRegister = validateData( data, model );
+        if ( Object.keys( newRegister ).length === 0 )
+            return buildResponse( 400, { message : 'Missing required fields or not valid' }, 'post' );
+
+        newRegister.edad = age( newRegister.fecha_nacimiento );
+    
+        const response = await database.create( newRegister, keyField );
+        return buildResponse( 200, response, 'post', keyField, data );
+    
+    } catch ( error ) {
+        colorLog( ` POST BENEFICIARIOS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
+        return buildResponse( 500, error, 'post' );
+    }
+}
