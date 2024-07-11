@@ -143,7 +143,7 @@ export async function postVenta({ data }) {
 
     const beneficiario = await postBeneficiarios({ data: nuevoBeneficiario, schema: "redcard" });
 
-    const beneficiario_id = beneficiario.response.insertId;
+    const beneficiario_id = beneficiario;
 
 
 
