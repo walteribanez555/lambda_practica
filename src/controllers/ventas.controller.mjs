@@ -145,12 +145,10 @@ export async function postVenta({ data }) {
 
     const beneficiario_id = beneficiario.insertId;
 
+    voucher.poliza_id = poliza_id;
+    voucher.beneficiario_id = beneficiario_id;
+    voucher.venta_id = venta_id;
 
-
-
-    ventas_id.push(venta_id);
-    polizas_id.push(poliza_id);
-    beneficiarios_id.push(beneficiario_id);
   }
   // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta
@@ -191,12 +189,10 @@ export async function postVenta({ data }) {
     200,
     {
       vouchers,
-      cantidad: vouchers.length,
       currentDate: currentDate.toISOString().split("T")[0],
       precio: price.aux_precio,
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
-      poliza_id : polizas_id,
     },
     "post"
   );
