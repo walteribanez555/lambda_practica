@@ -135,7 +135,7 @@ export async function postVenta({ data }) {
       segundo_nombre: '0',
       nro_identificacion: voucher.nro_identificacion,
       fecha_nacimiento: voucher.fecha_nacimiento,
-      edad: voucher.edad,
+      sexo : voucher.sexo,
       origen: voucher.origen,
       email: voucher.email,
       telefono: voucher.telefono,
