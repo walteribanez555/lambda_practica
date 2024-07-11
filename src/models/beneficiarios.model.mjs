@@ -34,7 +34,7 @@ export async function postBeneficiarios( { data, schema } ) {
         newRegister.edad = age( newRegister.fecha_nacimiento );
     
         const response = await database.create( newRegister, keyField );
-        return buildResponse( 200, response, 'post', keyField, data );
+        return response;
     
     } catch ( error ) {
         colorLog( ` POST BENEFICIARIOS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
