@@ -1,4 +1,4 @@
-import { executeMysql } from '../utils/database.mjs';
+import { DatabaseOperations, executeMysql } from '../utils/database.mjs';
 import { buildResponse, colorLog } from '../utils/helpers.mjs';
 
 
