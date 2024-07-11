@@ -198,9 +198,7 @@ export async function postVenta({ data }) {
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
       // response : venta,
-      ventas_id,
       poliza_id : polizas_id,
-      beneficiarios_id,
     },
     "post"
   );
