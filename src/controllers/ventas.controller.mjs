@@ -6,7 +6,6 @@ import { postVentas } from "../models/ventas.model.mjs";
 import { postPolizas } from "../models/polizas.model.mjs";
 import { postBeneficiarios } from "../models/beneficiarios.model.mjs";
 
-
 export async function getVentas({ id }) {
   return await getPlanes({ id, schema: "redcard" });
 }
@@ -21,7 +20,15 @@ export async function postVenta({ data }) {
     return buildResponse(400, { message: "Missing data" }, "post");
   }
 
-  const { servicio, multiviajes, vouchers, fecha_salida, fecha_retorno, destiny, extras } = data;
+  const {
+    servicio,
+    multiviajes,
+    vouchers,
+    fecha_salida,
+    fecha_retorno,
+    destiny,
+    extras,
+  } = data;
 
   const currentDate = new Date();
   const extraItems = [];
@@ -29,10 +36,10 @@ export async function postVenta({ data }) {
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
   const descuentosFiltered = descuentos.filter((descuento) => {
-
     // if(descuento.oficina_id === null || descuento.oficina_id=== undefined ) return null;
 
-    if(descuento.oficina_id == null || descuento.oficina_id.length == 0  ) return null;
+    if (descuento.oficina_id == null || descuento.oficina_id.length == 0)
+      return null;
 
     const policy = JSON.parse(descuento.oficina_id);
     if (
@@ -41,7 +48,7 @@ export async function postVenta({ data }) {
       policy.isApi == null ||
       policy.quantity == undefined ||
       policy === undefined ||
-      policy.isApi == undefined 
+      policy.isApi == undefined
     )
       return null;
 
@@ -60,48 +67,66 @@ export async function postVenta({ data }) {
 
   const initalDate = new Date(fecha_salida);
   const finalDate = new Date(fecha_retorno);
-  const nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24) +1;
+  const nroDias = (finalDate - initalDate) / (1000 * 60 * 60 * 24) + 1;
   const price = await redCardPrice({
-    schema : "redcard",
+    schema: "redcard",
     servicio,
-    multiviajes : (multiviajes !== undefined) ? multiviajes : null,
+    multiviajes: multiviajes !== undefined ? multiviajes : null,
     nroDias,
     cantidad: 1,
     tipo_descuento: 2,
     descuento: 0,
   });
 
-
-  if(extras !== undefined && extras.length > 0){
+  if (
+    multiviajes != undefined ||
+    (multiviajes != null && extras !== undefined && extras.length > 0)
+  ) {
     for (const extra of extras) {
-      const extraAmount = await extraSubTotal({ schema: "redcard", extra, total: price.aux_precio });
+      const extraAmount = await extraSubTotal({
+        schema: "redcard",
+        extra,
+        total: price.aux_precio,
+      });
       // price.aux_precio += extraAmount;
-      extraItems.push( {extraAmount, extra });
+      extraItems.push({ extraAmount, extra });
     }
   }
 
+  // const descuentoTotal = descuentosFiltered.reduce(
+  //   (acc, descuento) => acc + ( descuento.tipo_valor == 1 ?
+  //     parseFloat(price.aux_precio) * (parseFloat(descuento.valor) / 100) :
+  //     parseFloat(descuento.valor)
+  //     ),
+  //   0
+  // );
 
+  const descuentoTotal =
+    multiviajes == undefined || multiviajes == null
+      ? 0
+      : descuentosFiltered.reduce(
+          (acc, descuento) =>
+            acc +
+            (descuento.tipo_valor == 1
+              ? parseFloat(price.aux_precio) *
+                (parseFloat(descuento.valor) / 100)
+              : parseFloat(descuento.valor)),
+          0
+        );
 
-  const descuentoTotal = descuentosFiltered.reduce(
-    (acc, descuento) => acc + ( descuento.tipo_valor == 1 ?
-      parseFloat(price.aux_precio) * (parseFloat(descuento.valor) / 100) : 
-      parseFloat(descuento.valor)
-      ),
-    0
-  );
+  const totalPagar =
+    price.aux_precio -
+    descuentoTotal +
+    extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0);
 
-  const totalPagar =( price.aux_precio - descuentoTotal + extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0) );
-
-
-
- for (const voucher of vouchers) {
-    const nuevaVenta = { 
+  for (const voucher of vouchers) {
+    const nuevaVenta = {
       office_id: 1,
-      username: 'walteribanez555@gmail.com',
+      username: "walteribanez555@gmail.com",
       cliente_id: 29,
       tipo_venta: 5,
       forma_pago: 1,
-      fecha_venta: currentDate.toISOString().split("T")[0],  
+      fecha_venta: currentDate.toISOString().split("T")[0],
       cantidad: `${1}`,
       precio: `${price.aux_precio}`,
       total: `${price.aux_precio}`,
@@ -137,22 +162,23 @@ export async function postVenta({ data }) {
     const nuevoBeneficiario = {
       poliza_id,
       primer_apellido: voucher.apellidos,
-      segundo_apellido: '0',
+      segundo_apellido: "0",
       primer_nombre: voucher.nombres,
-      segundo_nombre: '0',
+      segundo_nombre: "0",
       nro_identificacion: voucher.nro_identificacion,
       fecha_nacimiento: voucher.fecha_nacimiento,
-      sexo : voucher.sexo,
+      sexo: voucher.sexo,
       origen: voucher.origen,
       email: voucher.email,
       telefono: voucher.telefono,
     };
 
-    const beneficiario = await postBeneficiarios({ data: nuevoBeneficiario, schema: "redcard" });
-
+    const beneficiario = await postBeneficiarios({
+      data: nuevoBeneficiario,
+      schema: "redcard",
+    });
 
     voucher.voucher_id = poliza_id;
-
   }
 
   return buildResponse(
@@ -161,25 +187,28 @@ export async function postVenta({ data }) {
       vouchers,
       currentDate: currentDate.toISOString().split("T")[0],
       precio: price.aux_precio,
-      plus : extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0),
-      descuento : descuentoTotal,
-      totalPagar : totalPagar * vouchers.length,
+      plus: extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0),
+      descuento: descuentoTotal,
+      totalPagar: totalPagar * vouchers.length,
       extraItems,
     },
     "post"
   );
 }
 
-const extraSubTotal = async( { schema, extra, total } ) => {    
+const extraSubTotal = async ({ schema, extra, total }) => {
   try {
-      const sql =  `select tipo_valor, incremento from extras where beneficio_id = ${ extra }`;
+    const sql = `select tipo_valor, incremento from extras where beneficio_id = ${extra}`;
 
-      const extras = await executeMysql( sql, schema );
-      const aus_extra = extras[ 0 ].tipo_valor === 1 ? total * ( extras[ 0 ].incremento / 100 ) : extras[ 0 ].incremento;
-      return aus_extra;
-  } catch ( error ) {
-      colorLog( ` extraSubTotal ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
-      return buildResponse( 500, error, 'get' );
+    const extras = await executeMysql(sql, schema);
+    const aus_extra =
+      extras[0].tipo_valor === 1
+        ? total * (extras[0].incremento / 100)
+        : extras[0].incremento;
+    return aus_extra;
+  } catch (error) {
+    colorLog(` extraSubTotal ERROR:  ${JSON.stringify(error)}`, "red", "reset");
+    return buildResponse(500, error, "get");
   }
 };
 
@@ -254,7 +283,3 @@ const redCardPrice = async ({
     return buildResponse(500, error, "get");
   }
 };
-
-
-
-
