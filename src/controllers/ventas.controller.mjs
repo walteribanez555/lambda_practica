@@ -21,10 +21,10 @@ export async function postVenta({ data }) {
     return buildResponse(400, { message: "Missing data" }, "post");
   }
 
-  const { servicio, multiviajes, vouchers, fecha_salida, fecha_retorno, destiny } = data;
+  const { servicio, multiviajes, vouchers, fecha_salida, fecha_retorno, destiny, extras } = data;
 
   const currentDate = new Date();
-
+  const extra = [];
 
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
@@ -70,6 +70,16 @@ export async function postVenta({ data }) {
     tipo_descuento: 2,
     descuento: 0,
   });
+
+
+  if(extras !== undefined && extras.length > 0){
+    for (const extra of extras) {
+      const extraAmount = await extraSubTotal({ schema: "redcard", extra, total: price.aux_precio });
+      price.aux_precio += extraAmount;
+      extra.push( extraAmount );
+    }
+  }
+
 
 
   const descuentoTotal = descuentosFiltered.reduce(
@@ -140,13 +150,15 @@ export async function postVenta({ data }) {
 
     const beneficiario = await postBeneficiarios({ data: nuevoBeneficiario, schema: "redcard" });
 
-    const beneficiario_id = beneficiario.insertId;
 
     voucher.voucher_id = poliza_id;
-    voucher.beneficiario_id = beneficiario_id;
-    voucher.venta_id = venta_id;
 
   }
+
+ 
+  
+
+
   // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
   //Crear Venta
 
@@ -190,10 +202,24 @@ export async function postVenta({ data }) {
       precio: price.aux_precio,
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
+      extra
     },
     "post"
   );
 }
+
+const extraSubTotal = async( { schema, extra, total } ) => {    
+  try {
+      const sql =  `select tipo_valor, incremento from extras where beneficio_id = ${ extra }`;
+
+      const extras = await executeMysql( sql, schema );
+      const aus_extra = extras[ 0 ].tipo_valor === 1 ? total * ( extras[ 0 ].incremento / 100 ) : extras[ 0 ].incremento;
+      return aus_extra;
+  } catch ( error ) {
+      colorLog( ` extraSubTotal ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
+      return buildResponse( 500, error, 'get' );
+  }
+};
 
 const redCardPrice = async ({
   schema,
@@ -266,3 +292,7 @@ const redCardPrice = async ({
     return buildResponse(500, error, "get");
   }
 };
+
+
+
+
