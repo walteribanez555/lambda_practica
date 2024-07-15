@@ -191,6 +191,7 @@ export async function postVenta({ data }) {
     });
 
     voucher.voucher_id = poliza_id;
+    voucher.venta_id = venta_id;
   }
 
   return buildResponse(
