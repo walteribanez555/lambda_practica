@@ -39,22 +39,11 @@ export async function postPolizasExtras( { data, schema } ) {
 
         const result = await database.create( newRegister, keyField );
 
-        // const beneficios = newRegister.beneficio_id.split(',');
-        // const montos = newRegister.monto_adicional.split(',');
-        // const result = [];
-        // for ( let i = 0; i < beneficios.length; i++ ) {
-        //     const register = {
-        //         venta_id : newRegister.venta_id,
-        //         beneficio_id : beneficios[ i ],
-        //         monto_adicional : montos[ i ],
-        //     };
-        //     const response = await database.create( register, keyField );
-        //     result.push( response[ 0 ] );
-        // }
-        return buildResponse( 200, result, 'post', keyField, data );
+        return result;
     
     } catch ( error ) {
-        colorLog( ` POST POLIZAS EXTRAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
-        return buildResponse( 500, error, 'post' );
+        // colorLog( ` POST POLIZAS EXTRAS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
+        // return buildResponse( 500, error, 'post' );
+        throw error;
     }
 }
