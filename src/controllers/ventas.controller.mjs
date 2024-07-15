@@ -93,13 +93,7 @@ export async function postVenta({ data }) {
     }
   }
 
-  // const descuentoTotal = descuentosFiltered.reduce(
-  //   (acc, descuento) => acc + ( descuento.tipo_valor == 1 ?
-  //     parseFloat(price.aux_precio) * (parseFloat(descuento.valor) / 100) :
-  //     parseFloat(descuento.valor)
-  //     ),
-  //   0
-  // );
+
 
   const descuentoTotal =
     multiviajes != undefined && multiviajes != null
@@ -183,20 +177,19 @@ export async function postVenta({ data }) {
     });
 
 
-
-    await extraItems.forEach(async (extra) => {
+    for ( const extra of extraItems ) {
       const poliza_extra = {
         venta_id,
         beneficio_id: extra.extra,
         monto_adicional: extra.extraAmount,
       };
 
-      console.log({poliza_extra});
-
-
       const responseExtra = await postPolizasExtras({ data: poliza_extra, schema: "redcard" });
       extrasRequests.push(responseExtra);
-    });
+    }
+
+
+
 
     voucher.voucher_id = poliza_id;
     voucher.venta_id = venta_id;
@@ -212,7 +205,6 @@ export async function postVenta({ data }) {
       plus: extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0),
       descuento: descuentoTotal,
       totalPagar: totalPagar * vouchers.length,
-      extraItems,
     },
     "post"
   );
