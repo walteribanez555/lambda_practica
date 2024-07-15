@@ -1,4 +1,3 @@
-import { getPlanes } from "../models/coberturas.model.mjs";
 import { buildResponse } from "../utils/helpers.mjs";
 import { executeMysql } from "../utils/database.mjs";
 import { getCupones } from "../models/cupones.model.mjs";
@@ -8,7 +7,7 @@ import { postBeneficiarios } from "../models/beneficiarios.model.mjs";
 import { postPolizasExtras } from "../models/polizasExtras.mjs";
 
 export async function getVentas({ id }) {
-  return await getPlanes({ id, schema: "redcard" });
+  return await getVentas({ id, schema: "redcard" });
 }
 
 export async function postVenta({ data }) {
