@@ -122,6 +122,8 @@ export async function postVenta({ data }) {
     descuentoTotal +
     extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0);
 
+  const extrasRequests = [];
+
   for (const voucher of vouchers) {
     const nuevaVenta = {
       office_id: 1,
@@ -181,13 +183,16 @@ export async function postVenta({ data }) {
       schema: "redcard",
     });
 
+
+
     await extraItems.forEach(async (extra) => {
       const poliza_extra = {
         venta_id,
         beneficio_id: extra.extra,
         monto_adicional: extra.extraAmount,
       };
-      await postPolizasExtras({ data: poliza_extra, schema: "redcard" });
+      const responseExtra = await postPolizasExtras({ data: poliza_extra, schema: "redcard" });
+      extrasRequests.push(responseExtra);
     });
 
     voucher.voucher_id = poliza_id;
@@ -204,6 +209,7 @@ export async function postVenta({ data }) {
       descuento: descuentoTotal,
       totalPagar: totalPagar * vouchers.length,
       extraItems,
+      extrasRequests,
     },
     "post"
   );
