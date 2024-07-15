@@ -184,8 +184,7 @@ export async function postVenta({ data }) {
         monto_adicional: extra.extraAmount,
       };
 
-      const responseExtra = await postPolizasExtras({ data: poliza_extra, schema: "redcard" });
-      extrasRequests.push(responseExtra);
+      await postPolizasExtras({ data: poliza_extra, schema: "redcard" });
     }
 
 
@@ -193,7 +192,6 @@ export async function postVenta({ data }) {
 
     voucher.voucher_id = poliza_id;
     voucher.venta_id = venta_id;
-    voucher.extra = extrasRequests;
   }
 
   return buildResponse(
