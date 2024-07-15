@@ -79,8 +79,10 @@ export async function postVenta({ data }) {
   });
 
   if (
-    multiviajes != undefined ||
-    (multiviajes != null && extras !== undefined && extras.length > 0)
+    multiviajes != undefined &&
+    multiviajes != null &&
+    extras !== undefined &&
+    extras.length > 0
   ) {
     for (const extra of extras) {
       const extraAmount = await extraSubTotal({
@@ -102,7 +104,7 @@ export async function postVenta({ data }) {
   // );
 
   const descuentoTotal =
-    multiviajes != undefined || multiviajes != null
+    multiviajes != undefined && multiviajes != null
       ? 0
       : descuentosFiltered.reduce(
           (acc, descuento) =>
