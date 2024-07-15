@@ -80,8 +80,6 @@ export async function postVenta({ data }) {
   });
 
   if (
-    multiviajes != undefined &&
-    multiviajes != null &&
     extras !== undefined &&
     extras.length > 0
   ) {
@@ -91,7 +89,6 @@ export async function postVenta({ data }) {
         extra,
         total: price.aux_precio,
       });
-      // price.aux_precio += extraAmount;
       extraItems.push({ extraAmount, extra });
     }
   }
@@ -122,7 +119,6 @@ export async function postVenta({ data }) {
     descuentoTotal +
     extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0);
 
-  const extrasRequests = [];
 
   for (const voucher of vouchers) {
     const nuevaVenta = {
@@ -144,6 +140,9 @@ export async function postVenta({ data }) {
       status: 2,
       comision: 0,
     };
+
+    const extrasRequests = [];
+
 
     const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
 
