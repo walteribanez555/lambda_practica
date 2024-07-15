@@ -34,7 +34,28 @@ export async function getServicios( { id, schema } ) {
             } 
         };
         const response = await database.read( data );
-        return buildResponse( 200, response, 'get' );
+        const result = response.map( item => {
+            return {
+                servicio_id : item.servicio_id,
+                servicio : item.servicio,
+                atencion_medica : item.descripcion,
+                precio_base : item.precio_base,
+                edad_base : item.edad_base,
+                edad_limite : item.edad_limite,
+                cobertura_global : item.cobertura_global,
+                tiempo_limite : item.tiempo_limite,
+                cupones : item.cupones,
+                descuento : item.descuento,
+                moneda : item.moneda,
+                img : item.img,
+                disponibilidad : item.disponibilidad,
+                status : item.status
+            };
+        });
+
+
+
+        return buildResponse( 200, result, 'get' );
     } catch ( error ) {
         colorLog( ` GET SERVICIOS ERROR:  ${ JSON.stringify( error ) }`, 'red', 'reset' );
         return buildResponse( 500, error, 'get' );
