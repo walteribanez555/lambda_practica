@@ -24,7 +24,7 @@ export async function postVenta({ data }) {
   const { servicio, multiviajes, vouchers, fecha_salida, fecha_retorno, destiny, extras } = data;
 
   const currentDate = new Date();
-  const extra = [];
+  const extraItems = [];
 
   const descuentos = await getCupones({ schema: "redcard", id: servicio });
 
@@ -76,7 +76,7 @@ export async function postVenta({ data }) {
     for (const extra of extras) {
       const extraAmount = await extraSubTotal({ schema: "redcard", extra, total: price.aux_precio });
       price.aux_precio += extraAmount;
-      extra.push( extraAmount );
+      extraItems.push( extraAmount );
     }
   }
 
@@ -202,7 +202,7 @@ export async function postVenta({ data }) {
       precio: price.aux_precio,
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
-      extra
+      extraItems,
     },
     "post"
   );
