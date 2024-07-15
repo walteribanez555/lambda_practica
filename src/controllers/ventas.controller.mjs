@@ -76,7 +76,7 @@ export async function postVenta({ data }) {
     for (const extra of extras) {
       const extraAmount = await extraSubTotal({ schema: "redcard", extra, total: price.aux_precio });
       price.aux_precio += extraAmount;
-      extraItems.push( extraAmount );
+      extraItems.push( {extraAmount, extra });
     }
   }
 
@@ -154,45 +154,6 @@ export async function postVenta({ data }) {
     voucher.voucher_id = poliza_id;
 
   }
-
- 
-  
-
-
-  // const venta = await postVentas({ data: nuevaVenta, schema: "redcard" });
-  //Crear Venta
-
-
-
-
-  // const descuentosFiltered = descuentos.filter((descuento) => {
-
-  //   if(descuento.oficina_id === null || descuento.oficina_id=== undefined ) return null;
-
-  //   // const policy  = JSON.parse(descuento.oficina_id);
-  //   const initialDate = new Date(descuento.fecha_desde);
-  //   const finalDate = new Date(descuento.fecha_hasta);
-  //   if (
-  //     initialDate <= currentDate &&
-  //     finalDate >= currentDate
-  //   ) {
-  //     return descuento;
-  //   }
-  //   return null;
-  // });
-
-  // const montoDescuentoPersona = descuentosFiltered.reduce(
-  //   (acc, descuento) => acc + parseFloat(descuento.valor),
-  //   0
-  // );
-
-  //Crear Venta por pasajero
-
-  //Agregar Extras por pasajero
-
-  //Crear Poliza por pasajero
-
-  //Crear Beneficiario por pasajero
 
   return buildResponse(
     200,
