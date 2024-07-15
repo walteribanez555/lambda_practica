@@ -102,7 +102,7 @@ export async function postVenta({ data }) {
   // );
 
   const descuentoTotal =
-    multiviajes == undefined || multiviajes == null
+    multiviajes != undefined || multiviajes != null
       ? 0
       : descuentosFiltered.reduce(
           (acc, descuento) =>
