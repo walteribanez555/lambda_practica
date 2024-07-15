@@ -209,7 +209,6 @@ export async function postVenta({ data }) {
       descuento: descuentoTotal,
       totalPagar: totalPagar * vouchers.length,
       extraItems,
-      extrasRequests,
     },
     "post"
   );
