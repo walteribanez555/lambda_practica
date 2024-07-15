@@ -161,6 +161,7 @@ export async function postVenta({ data }) {
       vouchers,
       currentDate: currentDate.toISOString().split("T")[0],
       precio: price.aux_precio,
+      plus : extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0),
       descuentoTotal,
       totalPagar : totalPagar * vouchers.length,
       extraItems,
