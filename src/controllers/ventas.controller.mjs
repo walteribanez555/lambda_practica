@@ -5,6 +5,7 @@ import { getCupones } from "../models/cupones.model.mjs";
 import { postVentas } from "../models/ventas.model.mjs";
 import { postPolizas } from "../models/polizas.model.mjs";
 import { postBeneficiarios } from "../models/beneficiarios.model.mjs";
+import { postPolizasExtras } from "../models/polizasExtras.model.mjs";
 
 export async function getVentas({ id }) {
   return await getPlanes({ id, schema: "redcard" });
@@ -178,6 +179,15 @@ export async function postVenta({ data }) {
     const beneficiario = await postBeneficiarios({
       data: nuevoBeneficiario,
       schema: "redcard",
+    });
+
+    await extraItems.forEach(async (extra) => {
+      const poliza_extra = {
+        venta_id,
+        beneficio_id: extra.extra,
+        monto_adicional: extra.extraAmount,
+      };
+      await postPolizasExtras({ data: poliza_extra, schema: "redcard" });
     });
 
     voucher.voucher_id = poliza_id;
