@@ -5,7 +5,7 @@ import { getCupones } from "../models/cupones.model.mjs";
 import { postVentas } from "../models/ventas.model.mjs";
 import { postPolizas } from "../models/polizas.model.mjs";
 import { postBeneficiarios } from "../models/beneficiarios.model.mjs";
-import { postPolizasExtras } from "../models/polizasExtras.model.mjs";
+import { postPolizasExtras } from "../models/polizasExtras.mjs";
 
 export async function getVentas({ id }) {
   return await getPlanes({ id, schema: "redcard" });
