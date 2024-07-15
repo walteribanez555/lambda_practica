@@ -75,7 +75,7 @@ export async function postVenta({ data }) {
   if(extras !== undefined && extras.length > 0){
     for (const extra of extras) {
       const extraAmount = await extraSubTotal({ schema: "redcard", extra, total: price.aux_precio });
-      price.aux_precio += extraAmount;
+      // price.aux_precio += extraAmount;
       extraItems.push( {extraAmount, extra });
     }
   }
@@ -90,7 +90,7 @@ export async function postVenta({ data }) {
     0
   );
 
-  const totalPagar =( price.aux_precio - descuentoTotal) ;
+  const totalPagar =( price.aux_precio - descuentoTotal + extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0) );
 
 
 
@@ -105,7 +105,7 @@ export async function postVenta({ data }) {
       cantidad: `${1}`,
       precio: `${price.aux_precio}`,
       total: `${price.aux_precio}`,
-      plus: 0,
+      plus: extraItems.reduce((acc, extra) => acc + extra.extraAmount, 0),
       tipo_descuento: `${2}`,
       descuento: `${descuentoTotal}`,
       tipo_valor: 1,
