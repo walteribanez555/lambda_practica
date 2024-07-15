@@ -191,13 +191,17 @@ export async function postVenta({ data }) {
         beneficio_id: extra.extra,
         monto_adicional: extra.extraAmount,
       };
+
+      console.log({poliza_extra});
+
+
       const responseExtra = await postPolizasExtras({ data: poliza_extra, schema: "redcard" });
       extrasRequests.push(responseExtra);
     });
 
     voucher.voucher_id = poliza_id;
     voucher.venta_id = venta_id;
-    voucher_extra = extrasRequests;
+    voucher.extra = extrasRequests;
   }
 
   return buildResponse(
